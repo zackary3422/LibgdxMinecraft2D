@@ -19,13 +19,13 @@ public abstract class Block {
     /** The width and height of the block*/
     private float width, height;
 
-    /**
-     *
-     *  */
+    /** The types of blocks a block can be*/
     public enum BlockType {GRASSBLOCK, DIRTBLOCK, STONEBLOCK, EMPTYBLOCK}
+
+    /** The type of block that this block is*/
     private BlockType blockType;
 
-    /**The sprite used to represent the stone block image*/
+    /** The sprite used to represent the stone block image*/
     Sprite sprite;
 
     /**
@@ -115,7 +115,11 @@ public abstract class Block {
         return x;
     }
 
-    /** */
+    /**
+     * Returns the y-coordinate of the player
+     *
+     * @return the y-coordinate
+     */
     public float getY(){
         return y;
     }

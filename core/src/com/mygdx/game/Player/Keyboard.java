@@ -2,13 +2,13 @@ package com.mygdx.game.Player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class Keyboard {
 
     /**
+     * Checks for player keyboard input
      *
-     *
+     * @param player reference to player to change position
      */
     public void update(Player player){
 

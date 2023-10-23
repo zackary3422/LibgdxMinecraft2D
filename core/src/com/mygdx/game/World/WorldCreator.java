@@ -1,6 +1,8 @@
 package com.mygdx.game.World;
 
 import com.mygdx.game.Blocks.*;
+import com.mygdx.game.Player.Player;
+
 import java.util.ArrayList;
 
 /**
@@ -49,6 +51,20 @@ public class WorldCreator {
 
             }
         }
+
+    }
+
+    /**
+     *
+     *
+     */
+    public void expandWorld(ArrayList<ArrayList<Block>> blocks, Player player){
+
+      //Expand world to the left
+      if(player.getX() - Window.width< blocks.get(0).get(0).getX()){
+
+
+      }
 
     }
 

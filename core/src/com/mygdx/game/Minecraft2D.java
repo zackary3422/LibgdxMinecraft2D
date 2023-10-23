@@ -30,7 +30,7 @@ public class Minecraft2D extends ApplicationAdapter {
 
 		window.draw(batch);
 
-		window.update(batch);
+		window.update();
 	}
 	
 	@Override
