@@ -15,7 +15,7 @@ public class Window {
 
     OrthographicCamera camera;
 
-    static int width, height;
+    public static int width, height;
 
 
     /**
@@ -43,7 +43,7 @@ public class Window {
      */
     public void draw(SpriteBatch batch){
 
-        worldBlocks.draw(batch);
+        worldBlocks.draw(batch, player);
         player.draw(batch);
 
         batch.setProjectionMatrix(camera.combined);
@@ -54,7 +54,9 @@ public class Window {
      *
      */
     public void update(){
+
         player.update();
+        worldBlocks.update(player);
         camera.update();
 
     }

@@ -19,6 +19,12 @@ public class Player {
     /** The camera of the player*/
     OrthographicCamera camera;
 
+    /** The player movement speed*/
+    private float playerSpeed = 180;
+
+    /** The speed multiplier when sprinting*/
+    private float shiftMultiplier = 1.5f;
+
     /**
      * Constructs a new Player and initializes variables and sets position of sprite.
      *
@@ -36,6 +42,9 @@ public class Player {
         x = spawnPoint[0];
         y = spawnPoint[1];
         setPosition(x, y);
+
+        width = sprite.getWidth();
+        height = sprite.getHeight();
     }
 
     /**
@@ -79,5 +88,15 @@ public class Player {
         return y;
     }
 
+    public float getCenterX(){return x + (width / 2);}
 
+    public float getCenterY(){return y + (height / 2);}
+
+    public float getPlayerSpeed(){
+        return playerSpeed;
+    }
+
+    public float getShiftMultiplier(){
+        return shiftMultiplier;
+    }
 }

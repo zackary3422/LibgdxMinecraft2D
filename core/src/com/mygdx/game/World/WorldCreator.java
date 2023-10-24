@@ -21,6 +21,8 @@ public class WorldCreator {
     /** The levels in which stone blocks are created*/
     static final int[] STONE_LEVEL = {0, 30};
 
+    /** The number of blocks the world gets expanded by*/
+    static final int EXPANSION_SIZE = 10;
 
     /**
      * Populates the blocks list with blocks
@@ -55,16 +57,83 @@ public class WorldCreator {
     }
 
     /**
+     * Expands world when player gets close to edge of world.
      *
-     *
+     * @param blocks the list of blocks
+     * @param player reference to player
      */
-    public void expandWorld(ArrayList<ArrayList<Block>> blocks, Player player){
+    public static void expandWorld(ArrayList<ArrayList<Block>> blocks, Player player){
+
+      /** The index for the end block of the list*/
+      int size = blocks.get(0).size() - 1;
 
       //Expand world to the left
-      if(player.getX() - Window.width< blocks.get(0).get(0).getX()){
+      if(player.getX() - Window.width < blocks.get(0).get(0).getX())
+          expandLeft(blocks);
+
+      //Expand world to the right
+      if(player.getX() + Window.width > blocks.get(0).get(size).getX())
+          expandRight(blocks);
 
 
-      }
+    }
+
+    /**
+     * Expands the list of blocks on the left side.
+     *
+     * @param blocks the list of blocks
+     */
+    public static void expandLeft(ArrayList<ArrayList<Block>> blocks){
+
+        for(int i = 0; i < WorldBlocks.WORLD_HEIGHT; i++) {
+            for (int j = 0; j < EXPANSION_SIZE; j++) {
+
+                //Get the left most blocks x-coordinate
+                float newX = blocks.get(i).get(0).getX() - Block.BLOCK_LENGTH;
+
+                //Adds new block based on block levels
+                if(i >= GRASS_LEVEL[0] && i <= GRASS_LEVEL[1])
+                    blocks.get(i).add(0, new GrassBlock(newX, i * Block.BLOCK_LENGTH));
+                else if(i >= DIRT_LEVEL[0] && i <= DIRT_LEVEL[1])
+                    blocks.get(i).add(0, new DirtBlock(newX, i * Block.BLOCK_LENGTH));
+                else if(i >= STONE_LEVEL[0] && i <= STONE_LEVEL[1])
+                    blocks.get(i).add(0, new StoneBlock(newX, i * Block.BLOCK_LENGTH));
+                else
+                    blocks.get(i).add(0, new EmptyBlock(newX, i * Block.BLOCK_LENGTH));
+
+            }
+        }
+
+    }
+
+    /**
+     * Expands the list of blocks on the right side.
+     *
+     * @param blocks the list of blocks
+     */
+    public static void expandRight(ArrayList<ArrayList<Block>> blocks){
+
+        for(int i = 0; i < WorldBlocks.WORLD_HEIGHT; i++){
+            for(int j = 0; j < EXPANSION_SIZE; j++){
+
+                //Update size
+                int size = blocks.get(i).size();
+
+                //Get the right most blocks x-coordinate
+                float newX = blocks.get(i).get(size - 1).getX() + Block.BLOCK_LENGTH;
+
+                //Adds new block based on block levels
+                if(i >= GRASS_LEVEL[0] && i <= GRASS_LEVEL[1])
+                    blocks.get(i).add(size, new GrassBlock(newX, i * Block.BLOCK_LENGTH));
+                else if(i >= DIRT_LEVEL[0] && i <= DIRT_LEVEL[1])
+                    blocks.get(i).add(size, new DirtBlock(newX, i * Block.BLOCK_LENGTH));
+                else if(i >= STONE_LEVEL[0] && i <= STONE_LEVEL[1])
+                    blocks.get(i).add(size, new StoneBlock(newX, i * Block.BLOCK_LENGTH));
+                else
+                    blocks.get(i).add(size, new EmptyBlock(newX, i * Block.BLOCK_LENGTH));
+
+            }
+        }
 
     }
 

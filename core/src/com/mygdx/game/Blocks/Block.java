@@ -2,6 +2,9 @@ package com.mygdx.game.Blocks;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.Player.Player;
+import java.awt.*;
+import com.mygdx.game.World.Window;
 
 /**
  * The {@code Block} abstract class represents a block in Minecraft.
@@ -83,6 +86,17 @@ public abstract class Block {
     }
 
     /**
+     * Determines if a block is within the view range of the player
+     *
+     * @return if block is visible to player
+     */
+    public boolean isVisible(Player player){
+
+        return Math.abs(player.getCenterX() - getCenterX()) < (com.mygdx.game.World.Window.width / 2.0) + 50;
+    }
+
+
+    /**
      * Sets a new position for the block and sets a new position for sprite
      *
      * @param x new x-position for block
@@ -123,4 +137,8 @@ public abstract class Block {
     public float getY(){
         return y;
     }
+
+    public float getCenterX(){return x + (width / 2);}
+
+    public float getCenterY(){return y + (height / 2);};
 }

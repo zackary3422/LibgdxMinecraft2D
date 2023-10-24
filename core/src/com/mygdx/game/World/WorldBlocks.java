@@ -3,6 +3,8 @@ package com.mygdx.game.World;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Blocks.Block;
+import com.mygdx.game.Player.Player;
+
 import java.util.ArrayList;
 
 /**
@@ -34,14 +36,25 @@ public class WorldBlocks {
     }
 
     /**
+     * Called every frame to update world blocks. Used to expand world as player explores.
+     *
+     * @param player used to pass onto methods like expandWorld
+     */
+    public void update(Player player){
+
+        WorldCreator.expandWorld(blocks, player);
+
+    }
+    /**
      * Draws all the blocks in the {@code blocks} list
      *
      * @param batch the SpriteBatch to draw sprites onto screen
      */
-    public void draw(SpriteBatch batch){
+    public void draw(SpriteBatch batch, Player player){
 
        for(int i = 0; i < blocks.size(); i++)
            for(int j = 0; j < blocks.get(0).size(); j++)
+               if(blocks.get(i).get(j).isVisible(player))
                 blocks.get(i).get(j).draw(batch);
 
     }

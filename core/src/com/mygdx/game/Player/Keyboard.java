@@ -12,19 +12,23 @@ public class Keyboard {
      */
     public void update(Player player){
 
+        //Gets accurate player speed based on delta time
+        float deltaSpeed = (Gdx.graphics.getDeltaTime() * player.getPlayerSpeed());
+
+
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
-            player.setPosition(player.x, player.y + 4f);
+            player.setPosition(player.x, player.y + deltaSpeed);
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            player.setPosition(player.x + 4f, player.y);
+            player.setPosition(player.x + deltaSpeed, player.y);
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.A))
-            player.setPosition(player.x - 4, player.y);
+            player.setPosition(player.x - deltaSpeed, player.y);
 
         if(Gdx.input.isKeyPressed(Input.Keys.S))
-            player.setPosition(player.x, player.y - 4);
+            player.setPosition(player.x, player.y - deltaSpeed);
 
     }
 
