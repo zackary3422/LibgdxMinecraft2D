@@ -26,14 +26,18 @@ public class Window {
      */
     public Window(int width, int height){
 
+        //Camera initialize
         camera = new OrthographicCamera(width, height);
         camera.position.set(0,0,0);
 
+        //Setting window dimension
+        Window.width = width;
+        Window.height = height;
+
+        //Initializing objects
         worldBlocks = new WorldBlocks();
         player = new Player(worldBlocks.spawnPoint(), camera);
 
-        Window.width = width;
-        Window.height = height;
     }
 
     /**

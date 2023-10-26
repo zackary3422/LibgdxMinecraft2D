@@ -4,6 +4,8 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.Components.Time;
+import com.mygdx.game.World.DaylightCycle;
 import com.mygdx.game.World.Window;
 
 public class Minecraft2D extends ApplicationAdapter {
@@ -26,11 +28,13 @@ public class Minecraft2D extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		ScreenUtils.clear(0, 0, 0, 1);
+		ScreenUtils.clear(DaylightCycle.currentDayColor());
+
+		Time.incrementTime();
 
 		window.draw(batch);
-
 		window.update();
+
 	}
 	
 	@Override

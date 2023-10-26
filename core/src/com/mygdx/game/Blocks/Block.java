@@ -2,6 +2,7 @@ package com.mygdx.game.Blocks;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.Components.Box2D;
 import com.mygdx.game.Player.Player;
 import java.awt.*;
 import com.mygdx.game.World.Window;
@@ -28,6 +29,9 @@ public abstract class Block {
     /** The type of block that this block is*/
     private BlockType blockType;
 
+    /** The box collider to detect collisions*/
+    public Box2D box2D;
+
     /** The sprite used to represent the stone block image*/
     Sprite sprite;
 
@@ -50,6 +54,8 @@ public abstract class Block {
         height = sprite.getHeight();
         this.x = x;
         this.y = y;
+
+        box2D = new Box2D(x, y, width, height);
     }
 
     /**
@@ -106,6 +112,9 @@ public abstract class Block {
         this.x = x;
         this.y = y;
 
+        if(box2D != null)
+            box2D.setPosition(x, y);
+
         if(sprite != null)
             sprite.setPosition(x, y);
     }
@@ -141,4 +150,17 @@ public abstract class Block {
     public float getCenterX(){return x + (width / 2);}
 
     public float getCenterY(){return y + (height / 2);};
+
+    public float getWidth(){
+        return width;
+    }
+
+    public float getHeight(){
+        return height;
+    }
+
+    public BlockType getBlockType(){
+        return blockType;
+    }
 }
+

@@ -15,8 +15,12 @@ public class Keyboard {
         //Gets accurate player speed based on delta time
         float deltaSpeed = (Gdx.graphics.getDeltaTime() * player.getPlayerSpeed());
 
+        if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+            deltaSpeed *= player.getShiftMultiplier();
+
 
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
+            player.setVerticalVelocity(Player.jumpForce);
             player.setPosition(player.x, player.y + deltaSpeed);
         }
 

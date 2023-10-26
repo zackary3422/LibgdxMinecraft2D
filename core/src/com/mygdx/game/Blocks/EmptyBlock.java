@@ -10,5 +10,6 @@ public class EmptyBlock extends Block{
      */
     public EmptyBlock(float x, float y){
         super(x, y);
+
     }
 }
