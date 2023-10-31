@@ -1,6 +1,7 @@
 package com.mygdx.game.World;
 
 import com.mygdx.game.Blocks.*;
+import com.mygdx.game.Components.Block;
 import com.mygdx.game.Player.Player;
 import java.util.Random;
 import java.util.ArrayList;
@@ -171,7 +172,7 @@ public class WorldCreator {
 
     }
 
-    
+
 
     public static void populateDirt(ArrayList<ArrayList<Block>> blocks){
 

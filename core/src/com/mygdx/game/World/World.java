@@ -2,8 +2,7 @@ package com.mygdx.game.World;
 
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.Blocks.Block;
-import com.mygdx.game.Components.Box2D;
+import com.mygdx.game.Components.Block;
 import com.mygdx.game.Player.Player;
 
 import java.util.ArrayList;
@@ -31,8 +30,8 @@ public class WorldBlocks {
      *
      */
     public WorldBlocks(){
-        blocks = WorldCreator.createWorld(INITWIDTH, WORLD_HEIGHT);
-      //  WorldCreator.populate(blocks, INITWIDTH, WORLD_HEIGHT);
+        blocks = TerrainGenerator.createWorld(INITWIDTH, WORLD_HEIGHT);
+      //  TerrainGenerator.populate(blocks, INITWIDTH, WORLD_HEIGHT);
     }
 
     /**
@@ -42,7 +41,7 @@ public class WorldBlocks {
      */
     public void update(Player player){
 
-        WorldCreator.expandWorld(blocks, player);
+        TerrainGenerator.expandWorld(blocks, player);
 
     }
     /**
