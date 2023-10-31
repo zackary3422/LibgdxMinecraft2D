@@ -1,11 +1,10 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.Components.Time;
-import com.mygdx.game.World.DaylightCycle;
+import com.mygdx.game.Components.DaylightCycle;
 import com.mygdx.game.World.Window;
 
 public class Minecraft2D extends ApplicationAdapter {

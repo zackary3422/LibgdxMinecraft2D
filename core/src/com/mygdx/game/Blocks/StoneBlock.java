@@ -2,22 +2,23 @@ package com.mygdx.game.Blocks;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.Components.Block;
 
 /**
  * The {@code StoneBlock} class represents a stone block using the Block parent class.
  *
  */
 
-public class StoneBlock extends Block{
+public class StoneBlock extends Block implements BlockAttributes{
 
     /**
      * Constructs a new stone block
      *
-     * @param x  the x-coordinate of the stone block
-     * @param y  the y-coordinate of the stone block
+     * @param position the position of the block
      */
-    public StoneBlock(float x, float y){
-        super(x, y, new Sprite(new Texture("StoneBlock.png")), BlockType.STONEBLOCK);
+    public StoneBlock(Vector2 position){
+        super(position, new Sprite(new Texture("StoneBlock.png")), BlockID.STONEBLOCK, true);
 
     }
 

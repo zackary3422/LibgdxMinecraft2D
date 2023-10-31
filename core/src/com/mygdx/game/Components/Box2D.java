@@ -1,28 +1,27 @@
 package com.mygdx.game.Components;
 
+import com.badlogic.gdx.math.Vector2;
+
 public class Box2D {
 
     /** The position of the box collider*/
-    float x, y;
+    Vector2 position;
 
     /** The dimensions of the box collider*/
-    float width, height;
+    Dimension dimension;
 
     /**
      *
      */
-    public Box2D(float x, float y, float width, float height){
+    public Box2D(Vector2 position, Dimension dimension){
 
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+        this.position = position;
+        this.dimension = dimension;
     }
 
 
-    public void setPosition(float x, float y){
-        this.x = x;
-        this.y = y;
+    public void setPosition(Vector2 newPosition){
+        position = newPosition;
     }
 
     /**
@@ -38,10 +37,10 @@ public class Box2D {
         float height2 = box2D.getHeight();
 
         //Find which parts of the box collider are overlapping (x & y)
-        boolean xOverlap = (x <= x2 + width2 && x >= x2) ||
-                           (x + width <= x2 + width2 && x + width >= x2);
-        boolean yOverlap = (y <= y2 + height2 && y >= y2) ||
-                           (y + height <= y2 + height2 && y + height >= y2);
+        boolean xOverlap = (position.x <= x2 + width2 && position.x >= x2) ||
+                           (position.x + dimension.width <= x2 + width2 && position.x + dimension.width >= x2);
+        boolean yOverlap = (position.y <= y2 + height2 && position.y >= y2) ||
+                           (position.y + dimension.height <= y2 + height2 && position.y + dimension.height >= y2);
 
         return xOverlap && yOverlap;
     }
@@ -58,9 +57,9 @@ public class Box2D {
         float height2 = box2D.getHeight();
 
         //Find which parts of the box collider are overlapping (x & y)
-        boolean xOverlap = (x <= x2 + width2 && x >= x2);
-        boolean yOverlap = (y <= y2 + height2 && y >= y2) ||
-                (y + height <= y2 + height2 && y + height >= y2);
+        boolean xOverlap = (position.x <= x2 + width2 && position.x >= x2);
+        boolean yOverlap = (position.y <= y2 + height2 && position.y >= y2) ||
+                (position.y + dimension.height <= y2 + height2 && position.y + dimension.height >= y2);
 
         return xOverlap && yOverlap;
     }
@@ -78,9 +77,9 @@ public class Box2D {
         float height2 = box2D.getHeight();
 
         //Find which parts of the box collider are overlapping (x & y)
-        boolean xOverlap = (x + width <= x2 + width2 && x + width >= x2);
-        boolean yOverlap = (y <= y2 + height2 && y >= y2) ||
-                           (y + height <= y2 + height2 && y + height >= y2);
+        boolean xOverlap = (position.x + dimension.width <= x2 + width2 && position.x + dimension.width >= x2);
+        boolean yOverlap = (position.y <= y2 + height2 && position.y >= y2) ||
+                           (position.y + dimension.height <= y2 + height2 && position.y + dimension.height >= y2);
 
         return xOverlap && yOverlap;
     }
@@ -99,9 +98,9 @@ public class Box2D {
 
 
         //Find which parts of the box collider are overlapping (x & y)
-        boolean xOverlap = (x <= x2 + width2 && x >= x2) ||
-                           (x + width <= x2 + width2 && x + width >= x2);
-        boolean yOverlap = (y + height <= y2 + height2 && y + height >= y2);
+        boolean xOverlap = (position.x <= x2 + width2 && position.x >= x2) ||
+                           (position.x + dimension.width <= x2 + width2 && position.x + dimension.width >= x2);
+        boolean yOverlap = (position.y + dimension.height <= y2 + height2 && position.y + dimension.height >= y2);
 
 
         return xOverlap && yOverlap;
@@ -109,7 +108,8 @@ public class Box2D {
 
     /**
      *
-     *  */
+     *
+     */
     public boolean topCollision(Box2D box2D){
 
         //Get parameter values
@@ -120,9 +120,9 @@ public class Box2D {
 
 
         //Find which parts of the box collider are overlapping (x & y)
-        boolean xOverlap = (x <= x2 + width2 && x >= x2) ||
-                (x + width <= x2 + width2 && x + width >= x2);
-        boolean yOverlap = (y <= y2 + height2 && y >= y2);
+        boolean xOverlap = (position.x <= x2 + width2 && position.x >= x2) ||
+                (position.x + dimension.width <= x2 + width2 && position.x + dimension.width >= x2);
+        boolean yOverlap = (position.y <= y2 + height2 && position.y >= y2);
 
         return xOverlap && yOverlap;
 
@@ -131,19 +131,19 @@ public class Box2D {
 
 
     public float getX(){
-        return x;
+        return position.x;
     }
 
     public float getY(){
-        return y;
+        return position.y;
     }
 
     public float getWidth(){
-        return width;
+        return dimension.width;
     }
 
     public float getHeight(){
-        return height;
+        return dimension.height;
     }
 
 }

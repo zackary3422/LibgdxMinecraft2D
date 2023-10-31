@@ -1,11 +1,12 @@
-package com.mygdx.game.Blocks;
+package com.mygdx.game.Components;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.Components.Box2D;
+import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.Blocks.BlockID;
 import com.mygdx.game.Player.Player;
-import java.awt.*;
-import com.mygdx.game.World.Window;
+import com.mygdx.game.Components.Dimension;
+
 
 /**
  * The {@code Block} abstract class represents a block in Minecraft.
@@ -15,19 +16,16 @@ import com.mygdx.game.World.Window;
 public abstract class Block {
 
     /** The x and y coordinates for the block*/
-    private float x, y;
-
-    /** This is the general length for both sides of a block*/
-    public static final float BLOCK_LENGTH = 45;
+    private Vector2 position;
 
     /** The width and height of the block*/
-    private float width, height;
+    private Dimension dimension;
 
-    /** The types of blocks a block can be*/
-    public enum BlockType {GRASSBLOCK, DIRTBLOCK, STONEBLOCK, EMPTYBLOCK}
+    /** */
+    public int ID;
 
-    /** The type of block that this block is*/
-    private BlockType blockType;
+    /** */
+    boolean collidable;
 
     /** The box collider to detect collisions*/
     public Box2D box2D;
@@ -35,46 +33,39 @@ public abstract class Block {
     /** The sprite used to represent the stone block image*/
     Sprite sprite;
 
+    /** This is the general length for both sides of a block*/
+    public static final float BLOCK_LENGTH = 45;
+
+
     /**
      * Constructs a new block and initializes the variables.
      *
-     * @param x x-coordinate of the block
-     * @param y y-coordinate of the block
+     * @param position the x & y position
      * @param sprite the sprite or graphical representation for the block
+     * @param ID the block ID
+     * @param collidable determine if variable is collidable with world
      */
-    public Block(float x, float y, Sprite sprite, BlockType blockType){
+    public Block(Vector2 position, Sprite sprite, int ID, boolean collidable){
+
 
         //Initialize sprite
         this.sprite = sprite;
-        sprite.setPosition(x, y);
-        this.blockType = blockType;
 
-        //Set coordinates and dimensions
-        width = sprite.getWidth();
-        height = sprite.getHeight();
-        this.x = x;
-        this.y = y;
+        setPosition(position);
 
-        box2D = new Box2D(x, y, width, height);
+        if(sprite == null)  //No sprite
+            dimension = new Dimension(BLOCK_LENGTH, BLOCK_LENGTH);
+        else
+            dimension = new Dimension(sprite.getWidth(), sprite.getHeight());
+
+
+        //Set block ID
+        this.ID = ID;
+
+        this.collidable = collidable;
+        box2D = new Box2D(position, dimension);
     }
 
-    /**
-     * Constructs a new block without a sprite and can't be drawn onto screen.
-     *
-     * @param x x-coordinate for block
-     * @param y y-coordinate for block
-     */
-    public Block(float x, float y){
-
-        sprite = null;
-        blockType = BlockType.EMPTYBLOCK;
-
-        //Set coordinates and dimensions
-        width = Block.BLOCK_LENGTH;
-        height = Block.BLOCK_LENGTH;
-        this.x = x;
-        this.y = y;
-    }
 
     /**
      * Draws a sprite onto screen if sprite isn't null
@@ -105,18 +96,16 @@ public abstract class Block {
     /**
      * Sets a new position for the block and sets a new position for sprite
      *
-     * @param x new x-position for block
-     * @param y new y-position for block
+     * @param newPosition new Vector2 position
      */
-    public void setPosition(float x, float y){
-        this.x = x;
-        this.y = y;
+    public void setPosition(Vector2 newPosition){
+        position = newPosition;
 
         if(box2D != null)
-            box2D.setPosition(x, y);
+            box2D.setPosition(position);
 
         if(sprite != null)
-            sprite.setPosition(x, y);
+            sprite.setPosition(position.x, position.y);
     }
 
     /**
@@ -126,8 +115,10 @@ public abstract class Block {
      */
     @Override
     public String toString(){
-        return blockType.toString();
+        return Integer.toString(ID);
     }
+
+    /* ----- ACCESSORS ----- */
 
     /**
      * Returns the x-coordinate of the player
@@ -135,7 +126,7 @@ public abstract class Block {
      * @return the x-coordinate
      */
     public float getX(){
-        return x;
+        return position.x;
     }
 
     /**
@@ -144,23 +135,32 @@ public abstract class Block {
      * @return the y-coordinate
      */
     public float getY(){
-        return y;
+        return position.y;
     }
 
-    public float getCenterX(){return x + (width / 2);}
 
-    public float getCenterY(){return y + (height / 2);};
+    public Vector2 getVector(){
+       return position;
+    }
+
+    public float getCenterX(){return position.x + (dimension.width / 2);}
+
+    public float getCenterY(){return position.y + (dimension.height / 2);};
 
     public float getWidth(){
-        return width;
+        return dimension.width;
     }
 
     public float getHeight(){
-        return height;
+        return dimension.height;
     }
 
-    public BlockType getBlockType(){
-        return blockType;
+    public int getID(){
+        return ID;
+    }
+
+    public boolean isCollidable(){
+        return collidable;
     }
 }
 

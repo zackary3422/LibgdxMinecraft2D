@@ -1,4 +1,4 @@
-package com.mygdx.game.World;
+package com.mygdx.game.Components;
 
 import com.badlogic.gdx.graphics.Color;
 import com.mygdx.game.Components.Time;

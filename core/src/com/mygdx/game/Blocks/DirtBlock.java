@@ -2,18 +2,19 @@ package com.mygdx.game.Blocks;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.Components.Block;
 
 
-public class DirtBlock extends Block{
+public class DirtBlock extends Block implements BlockAttributes{
 
     /**
      * Constructs a dirt block with coordinates.
      *
-     * @param x x-coordinate for block
-     * @param y y-coordinate for block
+     * @param position the position of the block
      */
-    public DirtBlock(float x, float y){
-        super(x, y, new Sprite(new Texture("DirtBlock.jpg")), BlockType.DIRTBLOCK);
+    public DirtBlock(Vector2 position){
+        super(position, new Sprite(new Texture("DirtBlock.jpg")), BlockID.DIRTBLOCK, true);
     }
 
 }

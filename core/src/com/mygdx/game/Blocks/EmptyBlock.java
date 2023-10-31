@@ -1,15 +1,20 @@
 package com.mygdx.game.Blocks;
 
-public class EmptyBlock extends Block{
+import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.Components.Block;
+
+public class EmptyBlock extends Block implements BlockAttributes{
+
+
+
 
     /**
      * Constructs an empty block without a sprite and just a position.
      *
-     * @param x x-coordinate for block
-     * @param y y-coordinate for block
+     * @param position the position of the block
      */
-    public EmptyBlock(float x, float y){
-        super(x, y);
+    public EmptyBlock(Vector2 position){
+        super(position, null, BlockID.EMPTYBLOCK, false);
 
     }
 }

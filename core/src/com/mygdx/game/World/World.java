@@ -2,37 +2,43 @@ package com.mygdx.game.World;
 
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.Blocks.BlockID;
 import com.mygdx.game.Components.Block;
 import com.mygdx.game.Player.Player;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
- *  The {@code WorldBlocks} class represents all the blocks in the Minecraft world. This class will store
+ *  The {@code World} class represents all the blocks in the Minecraft world. This class will store
  *  all the blocks in a 2D arraylist and this class can be used to access the worlds blocks
  *  and to edit them.
  */
 
-public class WorldBlocks {
+public class World {
 
-    /** The list of all the blocks in the world*/
-    static ArrayList<ArrayList<Block>> blocks;
+    /** The list of all the chunks in the world*/
+    public static ArrayList<Chunk> chunks;
 
-    /** The height of the world in blocks*/
-    public static final int WORLD_HEIGHT = 60;
+    /** The size of a chunk(segment of the world) in blocks*/
+    public static final Dimension CHUNK_SIZE = new Dimension(16, 60);
 
-    /** The initial width of the world in blocks*/
-    final int INITWIDTH = 40;
+    /***/
+    public enum Direction {LEFT, RIGHT, UP, DOWN}
 
 
     /**
      * Constructs a new World of Blocks and populates the arraylist
      *
      */
-    public WorldBlocks(){
-        blocks = TerrainGenerator.createWorld(INITWIDTH, WORLD_HEIGHT);
-      //  TerrainGenerator.populate(blocks, INITWIDTH, WORLD_HEIGHT);
+    public World(){
+        chunks = new ArrayList<Chunk>();
+
+        chunks = TerrainGenerator.newWorld();
     }
+
+
 
     /**
      * Called every frame to update world blocks. Used to expand world as player explores.
@@ -41,7 +47,7 @@ public class WorldBlocks {
      */
     public void update(Player player){
 
-        TerrainGenerator.expandWorld(blocks, player);
+        //TerrainGenerator.expandWorld(blocks, player);
 
     }
     /**
@@ -51,10 +57,8 @@ public class WorldBlocks {
      */
     public void draw(SpriteBatch batch, Player player){
 
-       for(int i = 0; i < blocks.size(); i++)
-           for(int j = 0; j < blocks.get(0).size(); j++)
-               if (blocks.get(i).get(j).isVisible(player))
-                   blocks.get(i).get(j).draw(batch);
+       for(int i = 0; i < chunks.size(); i++)
+           chunks.get(i).draw(batch, player);
 
     }
 
@@ -64,17 +68,11 @@ public class WorldBlocks {
      *
      * @return a float array with x and y coordinate
      */
-    public float[] spawnPoint(){
+    public Vector2 spawnPoint(){
 
-        for(int i = 0; i < blocks.size(); i++){
-            for(int j = 0; j < blocks.get(0).size(); j++){
-                if(blocks.get(i).get(j).toString().equals(Block.BlockType.GRASSBLOCK.toString()))
-                    return new float[] {blocks.get(i).get(j).getX(), blocks.get(i).get(j).getY() + blocks.get(i).get(j).getHeight() + 200};
-            }
 
-        }
 
-        return null;
+        return new Vector2(0,0);
     }
 
 

@@ -10,7 +10,7 @@ import com.mygdx.game.Player.Player;
  */
 public class Window {
 
-    WorldBlocks worldBlocks;
+    World world;
     Player player;
 
     OrthographicCamera camera;
@@ -35,8 +35,8 @@ public class Window {
         Window.height = height;
 
         //Initializing objects
-        worldBlocks = new WorldBlocks();
-        player = new Player(worldBlocks.spawnPoint(), camera);
+        world = new World();
+        player = new Player(world.spawnPoint(), camera);
 
     }
 
@@ -47,7 +47,7 @@ public class Window {
      */
     public void draw(SpriteBatch batch){
 
-        worldBlocks.draw(batch, player);
+        world.draw(batch, player);
         player.draw(batch);
 
         batch.setProjectionMatrix(camera.combined);
@@ -60,7 +60,7 @@ public class Window {
     public void update(){
 
         player.update();
-        worldBlocks.update(player);
+        world.update(player);
         camera.update();
 
     }

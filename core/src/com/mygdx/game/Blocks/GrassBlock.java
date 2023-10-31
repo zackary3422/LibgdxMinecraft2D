@@ -2,12 +2,14 @@ package com.mygdx.game.Blocks;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.Components.Block;
 
-public class GrassBlock extends Block{
+public class GrassBlock extends Block implements BlockAttributes{
 
 
-    public GrassBlock(float x, float y){
-        super(x, y, new Sprite(new Texture("GrassBlock.jpg")), BlockType.GRASSBLOCK);
+    public GrassBlock(Vector2 position){
+        super(position, new Sprite(new Texture("GrassBlock.jpg")), BlockID.GRASSBLOCK, true);
 
     }
 

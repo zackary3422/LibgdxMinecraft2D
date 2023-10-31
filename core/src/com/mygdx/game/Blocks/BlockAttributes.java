@@ -1,2 +1,8 @@
-package com.mygdx.game.Blocks;public interface BlockAttributes {
+package com.mygdx.game.Blocks;
+
+public interface BlockAttributes {
+
+
+
+
 }

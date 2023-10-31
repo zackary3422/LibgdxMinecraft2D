@@ -5,10 +5,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.Blocks.Block;
+import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.Components.Block;
 import com.mygdx.game.Components.Box2D;
+import com.mygdx.game.Components.Dimension;
 import com.mygdx.game.World.BlockCollisions;
-import com.mygdx.game.World.WorldBlocks;
 
 import java.util.ArrayList;
 
@@ -19,8 +20,9 @@ import java.util.ArrayList;
 
 public class Player {
 
-    /** Players coordinates and dimensions*/
-    float x, y, width, height;
+    /** Players coordinates and dimension*/
+    Vector2 position;
+    Dimension dimension;
 
     /** The sprite of the player to draw it*/
     Sprite sprite;
@@ -40,16 +42,16 @@ public class Player {
     /** The speed multiplier when sprinting*/
     private float shiftMultiplier = 1.9f;
 
-    /***/
-    static final float jumpForce = 220f;
+    /** The vertical force applied when jumping*/
+    static final float jumpForce = 200f;
 
-    /***/
+    /** The players vertical velocity*/
     float verticalVelocity = 0;
 
-    /***/
-    float gravity = -380f;
+    /** Gravity applied to players velocity*/
+    float gravity = -480f;
 
-    /***/
+    /** The list of blocks that are colliding with player*/
     public ArrayList<Block> collidingBlocks;
 
     /**
@@ -58,7 +60,7 @@ public class Player {
      * @param spawnPoint the x and y coordinates for the spawn point of the player
      * @param camera the camera for the player
      */
-    public Player(float[] spawnPoint, OrthographicCamera camera){
+    public Player(Vector2 spawnPoint, OrthographicCamera camera){
 
         this.camera = camera;
 
@@ -66,17 +68,16 @@ public class Player {
         keyboard = new Keyboard();
 
         //Set player position
-        x = spawnPoint[0];
-        y = spawnPoint[1];
+        position = new Vector2();
+        position.x = spawnPoint.x;
+        position.y = spawnPoint.y;
 
+        dimension = new Dimension(sprite.getWidth(), sprite.getHeight());
 
-        box2D = new Box2D(x, y, width, height);
-        setPosition(x, y);
+        box2D = new Box2D(position, dimension);
+        setPosition(position);
 
-        width = sprite.getWidth();
-        height = sprite.getHeight();
-
-        box2D = new Box2D(x, y, width, height);
+        box2D = new Box2D(position, dimension);
     }
 
     /**
@@ -84,12 +85,11 @@ public class Player {
      */
     public void update(){
 
-        keyboard.update(this);
+        keyboard.keyboardInput(this);
         applyGravity();
         updateCollidingBlocks();
-        setPosition(x, y);
+        setPosition(position);
         applyVelocity();
-
 
     }
 
@@ -105,7 +105,7 @@ public class Player {
     }
 
     /**
-     * Subtracts the vertical velocity
+     * Subtracts the vertical velocity to apply gravity
      *
      */
     public void applyGravity(){
@@ -113,55 +113,59 @@ public class Player {
     }
 
     /**
-     *
-     *
+     * Apply velocity to y-coordinate and stop movement if bottom of player is colliding with a block.
      */
     public void applyVelocity(){
 
+        //Move player down if there's nothing below
         if(BlockCollisions.bottomCollisions(collidingBlocks, box2D).isEmpty())
-            y += verticalVelocity * Gdx.graphics.getDeltaTime();
-        else {
+            position.y += verticalVelocity * Gdx.graphics.getDeltaTime();
+        else
+        {//Stop player from moving down and move player to bottom blocks position
             verticalVelocity = 0;
-            setPosition(x, BlockCollisions.bottomCollisions(collidingBlocks, box2D).get(0).getY() + BlockCollisions.bottomCollisions(collidingBlocks, box2D).get(0).getHeight());
+            setPosition(new Vector2(position.x, BlockCollisions.bottomCollisions(collidingBlocks, box2D).get(0).getY() + BlockCollisions.bottomCollisions(collidingBlocks, box2D).get(0).getHeight()));
         }
 
 
     }
 
     /**
-     *
-     *
+     * Update collidingBlocks list for new blocks colliding with player.
      */
     public void updateCollidingBlocks(){
+
+        //Get list of blocks colliding with player
         collidingBlocks = BlockCollisions.collidingBlocks(box2D);
 
+        //Filter out un-collidable blocks
+        BlockCollisions.filter(collidingBlocks);
     }
 
     /**
      * Sets a new position for player coordinates, sprite, and camera.
      *
-     * @param x new x-coordinate for player
-     * @param y new y-coordinate for player
-     *   */
-    public void setPosition(float x, float y){
-        this.x = x;
-        this.y = y;
-        sprite.setPosition(x, y);
-        camera.position.set(x, y,0);
-        box2D.setPosition(x, y);
+     * @param newPosition the vector for the new position of player
+     */
+    public void setPosition(Vector2 newPosition){
+        position = newPosition;
+        sprite.setPosition(position.x, position.y);
+        camera.position.set(position.x, position.y,0);
+        box2D.setPosition(position);
     }
 
+
+    /* ----- ACCESSORS ----- */
     public float getX(){
-        return x;
+        return position.x;
     }
 
     public float getY(){
-        return y;
+        return position.y;
     }
 
-    public float getCenterX(){return x + (width / 2);}
+    public float getCenterX(){return position.x + (dimension.width / 2);}
 
-    public float getCenterY(){return y + (height / 2);}
+    public float getCenterY(){return position.y + (dimension.height / 2);}
 
     public float getPlayerSpeed(){
         return playerSpeed;
@@ -175,6 +179,7 @@ public class Player {
         return verticalVelocity;
     }
 
+    /* ----- MUTATORS ----- */
     public void setVerticalVelocity(float velocity){
         verticalVelocity = velocity;
     }
