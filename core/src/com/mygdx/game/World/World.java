@@ -48,6 +48,7 @@ public class World {
     public void update(Player player){
 
         //TerrainGenerator.expandWorld(blocks, player);
+        TerrainGenerator.chunkExpander(player, chunks);
 
     }
     /**

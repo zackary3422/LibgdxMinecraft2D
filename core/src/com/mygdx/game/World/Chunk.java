@@ -20,9 +20,10 @@ public class Chunk {
     /** The biome of this chunk*/
     TerrainGenerator.Biomes biome;
 
-    int[] sideTopLayers = {0, 0};
 
-
+    /** 
+     *
+     */
     public Chunk(ArrayList<ArrayList<Block>> blocks, TerrainGenerator.Biomes biome){
 
         chunkBlocks = blocks;
@@ -64,17 +65,31 @@ public class Chunk {
         return sideLayers;
     }
 
-    public float[] getSideX(){
-        float[] sideX = new float[2];
+    public int getLeftSideTopLayer(){
 
+        //Get left side top layer
+        for(int i = CHUNK_SIZE.height - 1; i >= 0; i--)
+            if(BlockID.isTopLayer(chunkBlocks.get(i).get(0).getID()))
+                return i;
 
-        //Left most X coordinate
-        sideX[0] = chunkBlocks.get(0).get(0).getX();
+        return 0;
+    }
 
-        //Right most X coordinate
-        sideX[1] = chunkBlocks.get(0).get(chunkBlocks.get(0).size()-1).getX();
+    public int getRightSideTopLayer(){
+        //Get right side top layer
+        for(int i = CHUNK_SIZE.height - 1; i >= 0; i--)
+            if(BlockID.isTopLayer(chunkBlocks.get(i).get(CHUNK_SIZE.width - 1).getID()))
+                return i;
 
-        return sideX;
+        return 0;
+    }
+
+    public float getLeftMostX(){
+        return chunkBlocks.get(0).get(0).getX();
+    }
+
+    public float getRightMostX(){
+        return chunkBlocks.get(0).get(chunkBlocks.get(0).size()-1).getX();
     }
 
     public Vector2 getSpawnPoint(){
@@ -94,8 +109,13 @@ public class Chunk {
         return chunkBlocks.get(y).get(x);
     }
 
+    public TerrainGenerator.Biomes getBiome(){
+        return biome;
+    }
+
     public void setBlock(int x, int y, Block block){
         chunkBlocks.get(y).set(x, block);
     }
+
 
 }

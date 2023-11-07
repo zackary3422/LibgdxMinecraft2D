@@ -3,8 +3,7 @@ package com.mygdx.game.Blocks;
 public class BlockID {
 
 
-    /** The types of blocks a block can be*/
-   // public enum BlockTypes {GRASSBLOCK, DIRTBLOCK, STONEBLOCK, EMPTYBLOCK}
+    /* ----- BLOCK ID'S ----- */
 
     public static final int EMPTYBLOCK = 0;
 
@@ -18,6 +17,7 @@ public class BlockID {
     public static boolean isTopLayer(int ID){
         return (ID == GRASSBLOCK);
     }
+
 
 }
 
