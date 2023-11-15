@@ -14,7 +14,7 @@ public class DirtBlock extends Block implements BlockAttributes{
      * @param position the position of the block
      */
     public DirtBlock(Vector2 position){
-        super(position, new Sprite(new Texture("DirtBlock.jpg")), BlockID.DIRTBLOCK, true);
+        super(position, new Sprite(BlockTextures.getDirtBlock()), BlockID.DIRTBLOCK, true);
     }
 
 }

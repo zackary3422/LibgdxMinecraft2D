@@ -3,9 +3,7 @@ package com.mygdx.game.Components;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.Blocks.BlockID;
-import com.mygdx.game.Player.Player;
-import com.mygdx.game.Components.Dimension;
+
 
 
 /**
@@ -19,12 +17,12 @@ public abstract class Block {
     private Vector2 position;
 
     /** The width and height of the block*/
-    private Dimension dimension;
+    private Dimension<Float> dimension;
 
-    /** */
+    /** The ID for the block*/
     public int ID;
 
-    /** */
+    /** The boolean for whether this block is collidable or not*/
     boolean collidable;
 
     /** The box collider to detect collisions*/
@@ -69,11 +67,11 @@ public abstract class Block {
 
     /**
      * Draws a sprite onto screen if sprite isn't null
-     *
      * @param batch used to draw sprite onto screen
      */
     public void draw(SpriteBatch batch){
 
+        //Error handling
         if(sprite == null)
             return;
 
@@ -84,18 +82,29 @@ public abstract class Block {
 
     /**
      * Determines if a block is within the view range of the player
-     *
      * @return if block is visible to player
      */
-    public boolean isVisible(Player player){
+    public boolean isVisible(Vector2 playerPosition, Dimension<Float> viewPort){
 
-        return Math.abs(player.getCenterX() - getCenterX()) < (com.mygdx.game.World.Window.width / 2.0) + 50;
+        //Get parameters values with a offset value
+        float width2 = viewPort.width + 20;
+        float height2 = viewPort.height + 50;
+        float x2 = playerPosition.x - width2 / 2;
+        float y2 = playerPosition.y - height2 / 2;
+
+
+        //Find which parts of block is the player seeing
+        boolean xOverlap = (position.x <= x2 + width2 && position.x >= x2) ||
+                (position.x + dimension.width <= x2 + width2 && position.x + dimension.width >= x2);
+        boolean yOverlap = (position.y <= y2 + height2 && position.y >= y2) ||
+                (position.y + dimension.height <= y2 + height2 && position.y + dimension.height >= y2);
+
+        return xOverlap && yOverlap;
     }
 
 
     /**
      * Sets a new position for the block and sets a new position for sprite
-     *
      * @param newPosition new Vector2 position
      */
     public void setPosition(Vector2 newPosition){
@@ -108,57 +117,48 @@ public abstract class Block {
             sprite.setPosition(position.x, position.y);
     }
 
-    /**
-     * Overrides toString method to return the block type.
-     *
-     * @return the block type
-     */
-    @Override
-    public String toString(){
-        return Integer.toString(ID);
-    }
+
 
     /* ----- ACCESSORS ----- */
 
-    /**
-     * Returns the x-coordinate of the player
-     *
-     * @return the x-coordinate
-     */
+
+     /** @return the x-coordinate of the block*/
     public float getX(){
         return position.x;
     }
 
-    /**
-     * Returns the y-coordinate of the player
-     *
-     * @return the y-coordinate
-     */
+    /** @return the y-coordinate of the block*/
     public float getY(){
         return position.y;
     }
 
-
+    /** @return the vector position of block*/
     public Vector2 getVector(){
        return position;
     }
 
+    /** @return the center x-position of block*/
     public float getCenterX(){return position.x + (dimension.width / 2);}
 
+    /** @return the center y-position of block*/
     public float getCenterY(){return position.y + (dimension.height / 2);};
 
+    /** @return the block width*/
     public float getWidth(){
         return dimension.width;
     }
 
+    /** @return the block height*/
     public float getHeight(){
         return dimension.height;
     }
 
+    /** @return the ID for the block*/
     public int getID(){
         return ID;
     }
 
+    /** @return the boolean for if this block is collidable*/
     public boolean isCollidable(){
         return collidable;
     }

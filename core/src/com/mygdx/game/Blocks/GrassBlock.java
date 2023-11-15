@@ -9,7 +9,7 @@ public class GrassBlock extends Block implements BlockAttributes{
 
 
     public GrassBlock(Vector2 position){
-        super(position, new Sprite(new Texture("GrassBlock.jpg")), BlockID.GRASSBLOCK, true);
+        super(position, new Sprite(BlockTextures.getGrassBlock()), BlockID.GRASSBLOCK, true);
 
     }
 

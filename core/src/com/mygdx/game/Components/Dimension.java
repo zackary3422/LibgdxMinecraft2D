@@ -1,13 +1,15 @@
 package com.mygdx.game.Components;
 
-public class Dimension {
+public class Dimension <T>{
 
-    public float width;
-    public float height;
+    public T width;
+    public T height;
 
-    public Dimension(float width, float height){
+    public Dimension (T width, T height){
         this.width = width;
         this.height = height;
     }
+
+
 
 }

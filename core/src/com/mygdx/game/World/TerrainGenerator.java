@@ -94,7 +94,7 @@ public class TerrainGenerator {
     public static void addChunk(ArrayList<Chunk> chunkList, Chunk linkChunk, World.Direction direction){
 
         if(linkChunk == null){
-            System.out.println("ERROR: LinkChunk NULL");
+            System.out.println("ERROR: Tried to add a null chunk");
             return;
         }
 
@@ -184,19 +184,21 @@ public class TerrainGenerator {
      */
     public static void chunkExpander(Player player, ArrayList<Chunk> chunks){
 
+            //Get left & right most positions of chunk
             float chunkLeftMostX = chunks.get(0).getLeftMostX();
             float chunkRightMostX = chunks.get(chunks.size()-1).getRightMostX();
 
-            float playerLeftMostViewX = player.getX() - Window.width / 2.0f;
-            float playerRightMostX = player.getX() + Window.width / 2.0f;
+            //Get left & right most positions of players view
+            float playerLeftViewX = player.getX() - Window.width / 2.0f;
+            float playerRightViewX = player.getX() + Window.width / 2.0f;
 
             //Expand left
-            if(playerLeftMostViewX < chunkLeftMostX ){
+            if(playerLeftViewX < chunkLeftMostX )
                 addChunk(chunks, generateChunk(generateBiome(chunks, World.Direction.LEFT), chunks.get(0).getLeftSideTopLayer()), World.Direction.LEFT);
-            }
 
             //Expand right
-
+            if(playerRightViewX > chunkRightMostX)
+                addChunk(chunks, generateChunk(generateBiome(chunks, World.Direction.RIGHT), chunks.get(chunks.size()-1).getRightSideTopLayer()), World.Direction.RIGHT);
 
     }
 
@@ -252,7 +254,7 @@ public class TerrainGenerator {
     }
 
 
-    /* ----- Chunk Biome Generator----- */
+    /* ----- Biome Chunk Generator----- */
 
     /**
      * Creates a chunk of biome forest type.
@@ -282,7 +284,6 @@ public class TerrainGenerator {
 
         return new Chunk(blocks, Biomes.FOREST);
     }
-
 
 
 

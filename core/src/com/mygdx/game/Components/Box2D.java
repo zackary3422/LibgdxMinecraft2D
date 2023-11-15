@@ -8,10 +8,12 @@ public class Box2D {
     Vector2 position;
 
     /** The dimensions of the box collider*/
-    Dimension dimension;
+    Dimension<Float> dimension;
 
     /**
-     *
+     * Constructs a new box2D from given position and dimension.
+     * @param position the position of the box2D
+     * @param dimension the dimension of the box2D
      */
     public Box2D(Vector2 position, Dimension dimension){
 
@@ -19,14 +21,18 @@ public class Box2D {
         this.dimension = dimension;
     }
 
-
+    /**
+     * Sets a new position for this Box2D.
+     * @param newPosition the new position for this box2D
+     */
     public void setPosition(Vector2 newPosition){
         position = newPosition;
     }
 
     /**
-     *
-     *
+     * Checks if this box2D is colliding with given box2D
+     * @param box2D the box2D to check if this box2D is colliding with
+     * @return the boolean if this block is colliding with given box2D
      */
     public boolean isColliding(Box2D box2D){
 
@@ -129,6 +135,7 @@ public class Box2D {
     }
 
 
+    /* ----- ACCESSORS ----- */
 
     public float getX(){
         return position.x;

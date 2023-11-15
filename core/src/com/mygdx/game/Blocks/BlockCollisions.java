@@ -1,7 +1,9 @@
-package com.mygdx.game.World;
+package com.mygdx.game.Blocks;
 
 import com.mygdx.game.Components.Block;
 import com.mygdx.game.Components.Box2D;
+import com.mygdx.game.World.Chunk;
+import com.mygdx.game.World.World;
 
 import java.util.ArrayList;
 

@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Components.Block;
 import com.mygdx.game.Components.Box2D;
 import com.mygdx.game.Components.Dimension;
-import com.mygdx.game.World.BlockCollisions;
+import com.mygdx.game.Blocks.BlockCollisions;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,8 @@ public class Player {
 
     /** Players coordinates and dimension*/
     Vector2 position;
-    Dimension dimension;
+    Dimension<Float> dimension;
+    Dimension<Float> viewPort;
 
     /** The sprite of the player to draw it*/
     Sprite sprite;
@@ -37,10 +38,10 @@ public class Player {
     OrthographicCamera camera;
 
     /** The player movement speed*/
-    private float playerSpeed = 160;
+    private float playerSpeed = 400;
 
     /** The speed multiplier when sprinting*/
-    private float shiftMultiplier = 1.9f;
+    private float shiftMultiplier = 3.9f;
 
     /** The vertical force applied when jumping*/
     static final float jumpForce = 200f;
@@ -63,6 +64,7 @@ public class Player {
     public Player(Vector2 spawnPoint, OrthographicCamera camera){
 
         this.camera = camera;
+        viewPort = new Dimension<Float>(camera.viewportWidth, camera.viewportHeight);
 
         sprite = new Sprite(new Texture("Steve.png"));
         keyboard = new Keyboard();
@@ -72,7 +74,7 @@ public class Player {
         position.x = spawnPoint.x;
         position.y = spawnPoint.y;
 
-        dimension = new Dimension(sprite.getWidth(), sprite.getHeight());
+        dimension = new Dimension<Float>(sprite.getWidth(), sprite.getHeight());
 
         box2D = new Box2D(position, dimension);
         setPosition(position);
@@ -177,6 +179,14 @@ public class Player {
 
     public float getVerticalVelocity(){
         return verticalVelocity;
+    }
+
+    public Vector2 getPosition(){
+        return position;
+    }
+
+    public Dimension<Float> getViewPort(){
+        return viewPort;
     }
 
     /* ----- MUTATORS ----- */

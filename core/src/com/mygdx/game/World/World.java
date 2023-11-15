@@ -4,6 +4,7 @@ package com.mygdx.game.World;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Blocks.BlockID;
+import com.mygdx.game.Blocks.BlockTextures;
 import com.mygdx.game.Components.Block;
 import com.mygdx.game.Player.Player;
 
@@ -16,7 +17,8 @@ import java.util.ArrayList;
  *  and to edit them.
  */
 
-public class World {
+public class World{
+
 
     /** The list of all the chunks in the world*/
     public static ArrayList<Chunk> chunks;
@@ -24,8 +26,10 @@ public class World {
     /** The size of a chunk(segment of the world) in blocks*/
     public static final Dimension CHUNK_SIZE = new Dimension(16, 60);
 
-    /***/
+    /** */
     public enum Direction {LEFT, RIGHT, UP, DOWN}
+
+    //Create a block texture region class with static array texture region which the blocks can call upon
 
 
     /**
@@ -33,8 +37,9 @@ public class World {
      *
      */
     public World(){
-        chunks = new ArrayList<Chunk>();
+        BlockTextures.initBlockTextures();
 
+        chunks = new ArrayList<Chunk>();
         chunks = TerrainGenerator.newWorld();
     }
 
@@ -47,7 +52,6 @@ public class World {
      */
     public void update(Player player){
 
-        //TerrainGenerator.expandWorld(blocks, player);
         TerrainGenerator.chunkExpander(player, chunks);
 
     }
@@ -59,7 +63,8 @@ public class World {
     public void draw(SpriteBatch batch, Player player){
 
        for(int i = 0; i < chunks.size(); i++)
-           chunks.get(i).draw(batch, player);
+           if(chunks.get(i).isVisible(player.getPosition(), player.getViewPort()))
+                chunks.get(i).draw(batch, player.getPosition(), player.getViewPort());
 
     }
 

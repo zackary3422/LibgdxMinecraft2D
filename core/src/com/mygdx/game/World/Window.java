@@ -2,6 +2,7 @@ package com.mygdx.game.World;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.Blocks.BlockTextures;
 import com.mygdx.game.Player.Player;
 
 /**
@@ -49,6 +50,7 @@ public class Window {
 
         world.draw(batch, player);
         player.draw(batch);
+
 
         batch.setProjectionMatrix(camera.combined);
     }
