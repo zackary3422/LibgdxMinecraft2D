@@ -18,20 +18,29 @@ public class Chunk {
     /** The biome of this chunk*/
     TerrainGenerator.Biomes biome;
 
+    /** The ID of the chunk for identification*/
+    private int ID;
+
 
     /**
      * Constructs a new chunk with a list of blocks and a biome type.
      * @param blocks the list of blocks this chunk holds
      * @param biome the biome type of this chunk
      */
-    public Chunk(ArrayList<ArrayList<Block>> blocks, TerrainGenerator.Biomes biome){
+    public Chunk(ArrayList<ArrayList<Block>> blocks, TerrainGenerator.Biomes biome, int ID){
 
         chunkBlocks = blocks;
         this.biome = biome;
+        this.ID = ID;
     }
 
+
+
     /**
-     * Draws the chunk blocks onto the screen
+     * Draws the chunk blocks onto the screen if they are visible to player
+     * @param batch the drawer
+     * @param playerPosition
+     * @param viewPort the width and height of the players viewport
      */
     public void draw(SpriteBatch batch, Vector2 playerPosition, Dimension<Float> viewPort){
 
@@ -43,7 +52,12 @@ public class Chunk {
 
     }
 
-
+    /**
+     * Determines if the chunk is within player view
+     * @param playerPosition the position of the player
+     * @param viewPort the dimensions of the players view
+     * @return if the chunk is visible to player
+     */
     public boolean isVisible(Vector2 playerPosition, Dimension<Float> viewPort){
 
         //Get left & right most positions of chunk
@@ -62,6 +76,7 @@ public class Chunk {
 
 
     }
+
 
     /* ----- ACCESSORS ----- */
 
@@ -113,6 +128,12 @@ public class Chunk {
     public TerrainGenerator.Biomes getBiome(){
         return biome;
     }
+
+    public int getID(){
+        return ID;
+    }
+
+    /* ----- MUTATORS ----- */
 
     public void setBlock(int x, int y, Block block){
         chunkBlocks.get(y).set(x, block);

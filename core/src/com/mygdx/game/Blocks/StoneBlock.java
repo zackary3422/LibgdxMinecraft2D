@@ -19,7 +19,6 @@ public class StoneBlock extends Block implements BlockAttributes{
      */
     public StoneBlock(Vector2 position){
         super(position, new Sprite(BlockTextures.getStoneBlock()), BlockID.STONEBLOCK, true);
-
     }
 
 

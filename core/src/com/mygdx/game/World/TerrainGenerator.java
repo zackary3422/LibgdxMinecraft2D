@@ -49,16 +49,16 @@ public class TerrainGenerator {
 
         ArrayList<Chunk> chunks = new ArrayList<Chunk>();
 
-        chunks.add(generateForestChunk(GRASS_LEVEL[0]));
+        chunks.add(generateForestChunk(GRASS_LEVEL[0], 0));
 
         //Generate right side of world
         for(int i = 0; i < 6; i++){
-            addChunk(chunks, generateForestChunk(chunks.get(chunks.size()-1).getRightSideTopLayer()), World.Direction.RIGHT);
+            addChunk(chunks, generateForestChunk(chunks.get(chunks.size()-1).getRightSideTopLayer(), chunks.get(0).getID() + 1), World.Direction.RIGHT);
         }
 
         //Generate left side of world
         for(int i = 0; i < 6; i++){
-            addChunk(chunks, generateForestChunk(chunks.get(0).getLeftSideTopLayer()), World.Direction.LEFT);
+            addChunk(chunks, generateForestChunk(chunks.get(0).getLeftSideTopLayer(), chunks.get(0).getID() - 1), World.Direction.LEFT);
         }
 
         //Return new
@@ -74,11 +74,11 @@ public class TerrainGenerator {
      * @param sideTopLayer the top layer of the chunk it will be linked to
      * @return the chunk that is generated
      */
-    public static Chunk generateChunk(Biomes biome, int sideTopLayer) {
+    public static Chunk generateChunk(Biomes biome, int sideTopLayer, int ID) {
 
 
         if(biome == Biomes.FOREST)
-            return generateForestChunk(sideTopLayer);
+            return generateForestChunk(sideTopLayer, ID);
 
 
         return null;
@@ -180,28 +180,27 @@ public class TerrainGenerator {
 
     /**
      * Adds chunks to the world as player approaches the sides of the world to keep world continous.
-     * @param player the player object used to see if player is approaching edge of world
+     * @param playerPosition the player position used to see if they're approaching edge of world
      */
-    public static void chunkExpander(Player player, ArrayList<Chunk> chunks){
+    public static void chunkExpander(Vector2 playerPosition, ArrayList<Chunk> chunks){
 
             //Get left & right most positions of chunk
             float chunkLeftMostX = chunks.get(0).getLeftMostX();
             float chunkRightMostX = chunks.get(chunks.size()-1).getRightMostX();
 
             //Get left & right most positions of players view
-            float playerLeftViewX = player.getX() - Window.width / 2.0f;
-            float playerRightViewX = player.getX() + Window.width / 2.0f;
+            float playerLeftViewX = playerPosition.x - Window.width / 2.0f;
+            float playerRightViewX = playerPosition.x + Window.width / 2.0f;
 
             //Expand left
             if(playerLeftViewX < chunkLeftMostX )
-                addChunk(chunks, generateChunk(generateBiome(chunks, World.Direction.LEFT), chunks.get(0).getLeftSideTopLayer()), World.Direction.LEFT);
+                addChunk(chunks, generateChunk(generateBiome(chunks, World.Direction.LEFT), chunks.get(0).getLeftSideTopLayer(), chunks.get(0).getID() - 1), World.Direction.LEFT);
 
             //Expand right
             if(playerRightViewX > chunkRightMostX)
-                addChunk(chunks, generateChunk(generateBiome(chunks, World.Direction.RIGHT), chunks.get(chunks.size()-1).getRightSideTopLayer()), World.Direction.RIGHT);
+                addChunk(chunks, generateChunk(generateBiome(chunks, World.Direction.RIGHT), chunks.get(chunks.size()-1).getRightSideTopLayer(), chunks.get(0).getID() + 1), World.Direction.RIGHT);
 
     }
-
 
 
     /* ----- Biome Creators ----- */
@@ -261,7 +260,7 @@ public class TerrainGenerator {
      * @param sideTopLayer the top layer of the chunk next to where this chunk is being placed.
      * @return the generated forest chunk
      */
-    public static Chunk generateForestChunk(int sideTopLayer){
+    public static Chunk generateForestChunk(int sideTopLayer, int ID){
 
         //The new world in a 2D arraylist
         ArrayList<ArrayList<Block>> blocks = new ArrayList<ArrayList<Block>>();
@@ -282,7 +281,7 @@ public class TerrainGenerator {
         populateStone(blocks);
 
 
-        return new Chunk(blocks, Biomes.FOREST);
+        return new Chunk(blocks, Biomes.FOREST, ID);
     }
 
 

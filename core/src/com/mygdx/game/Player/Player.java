@@ -38,10 +38,10 @@ public class Player {
     OrthographicCamera camera;
 
     /** The player movement speed*/
-    private float playerSpeed = 400;
+    private float playerSpeed = 200;
 
     /** The speed multiplier when sprinting*/
-    private float shiftMultiplier = 3.9f;
+    private float shiftMultiplier = 1.9f;
 
     /** The vertical force applied when jumping*/
     static final float jumpForce = 200f;
@@ -118,6 +118,7 @@ public class Player {
      * Apply velocity to y-coordinate and stop movement if bottom of player is colliding with a block.
      */
     public void applyVelocity(){
+
 
         //Move player down if there's nothing below
         if(BlockCollisions.bottomCollisions(collidingBlocks, box2D).isEmpty())

@@ -52,7 +52,7 @@ public class World{
      */
     public void update(Player player){
 
-        TerrainGenerator.chunkExpander(player, chunks);
+        TerrainGenerator.chunkExpander(player.getPosition(), chunks);
 
     }
     /**
