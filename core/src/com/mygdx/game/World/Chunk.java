@@ -109,10 +109,12 @@ public class Chunk {
 
     public Vector2 getSpawnPoint(){
 
-        for(int i = 0; i < chunkBlocks.size(); i++){
-            for(int j = 0; j < chunkBlocks.get(0).size(); j++){
-                if(BlockID.isTopLayer(chunkBlocks.get(i).get(j).getID()))
-                    return chunkBlocks.get(i).get(j).getVector();
+        for (ArrayList<Block> chunkBlock : chunkBlocks) {
+            for (int j = 0; j < chunkBlocks.get(0).size(); j++) {
+                if (BlockID.isTopLayer(chunkBlock.get(j).getID())) {
+                    Block block = chunkBlock.get(j);
+                    return new Vector2(block.getX(), block.getY() + block.getHeight());
+                }
             }
         }
         //

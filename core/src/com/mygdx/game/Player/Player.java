@@ -44,16 +44,20 @@ public class Player {
     private float shiftMultiplier = 1.9f;
 
     /** The vertical force applied when jumping*/
-    static final float jumpForce = 200f;
+    static final float jumpForce = 300f;
 
     /** The players vertical velocity*/
     float verticalVelocity = 0;
 
+    /** The players horizontal velocity*/
+    float horizontalVelocity = 0;
+
     /** Gravity applied to players velocity*/
-    float gravity = -480f;
+    float gravity = -580f;
 
     /** The list of blocks that are colliding with player*/
     public ArrayList<Block> collidingBlocks;
+
 
     /**
      * Constructs a new Player and initializes variables and sets position of sprite.
@@ -78,8 +82,6 @@ public class Player {
 
         box2D = new Box2D(position, dimension);
         setPosition(position);
-
-        box2D = new Box2D(position, dimension);
     }
 
     /**
@@ -88,11 +90,10 @@ public class Player {
     public void update(){
 
         keyboard.keyboardInput(this);
-        applyGravity();
+
         updateCollidingBlocks();
         setPosition(position);
-        applyVelocity();
-
+        applyVelocities();
     }
 
     /**
@@ -106,19 +107,23 @@ public class Player {
         batch.end();
     }
 
-    /**
-     * Subtracts the vertical velocity to apply gravity
-     *
-     */
-    public void applyGravity(){
-        verticalVelocity += gravity * Gdx.graphics.getDeltaTime();
-    }
 
     /**
      * Apply velocity to y-coordinate and stop movement if bottom of player is colliding with a block.
      */
-    public void applyVelocity(){
+    public void applyVelocities(){
 
+        //Subtracts the vertical velocity to apply gravity
+        verticalVelocity += gravity * Gdx.graphics.getDeltaTime();
+
+
+        //Set Velocities equal to zero if there's collision in the way
+
+
+        //Apply Velocities
+
+
+        //If colliding in block with new position then readjust
 
         //Move player down if there's nothing below
         if(BlockCollisions.bottomCollisions(collidingBlocks, box2D).isEmpty())
@@ -131,6 +136,7 @@ public class Player {
 
 
     }
+
 
     /**
      * Update collidingBlocks list for new blocks colliding with player.
@@ -145,7 +151,7 @@ public class Player {
     }
 
     /**
-     * Sets a new position for player coordinates, sprite, and camera.
+     * Sets a new position for player coordinates, sprite, box2D, and camera.
      *
      * @param newPosition the vector for the new position of player
      */
@@ -190,8 +196,14 @@ public class Player {
         return viewPort;
     }
 
+    public Dimension<Float> getDimension(){return dimension;}
+
     /* ----- MUTATORS ----- */
     public void setVerticalVelocity(float velocity){
         verticalVelocity = velocity;
+    }
+
+    public void setHorizontalVelocity(float velocity){
+        horizontalVelocity = velocity;
     }
 }

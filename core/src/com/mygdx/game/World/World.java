@@ -29,7 +29,7 @@ public class World{
     /** */
     public enum Direction {LEFT, RIGHT, UP, DOWN}
 
-    //Create a block texture region class with static array texture region which the blocks can call upon
+    int spawnPointID = 0;
 
 
     /**
@@ -69,14 +69,21 @@ public class World{
     }
 
     /**
-     *  Finds a spawn point for the player on top of a grass block and
-     *  returns the coordinates
+     *  Finds a spawn point for the player on top of a top layer block and
+     *  returns the coordinates. Has error handling for out of bounds index.
      *
-     * @return a float array with x and y coordinate
+     * @return a vector2 with x and y coordinate
      */
     public Vector2 spawnPoint(){
-
-
+        try{
+            return chunks.get(0).getSpawnPoint();
+        }
+        catch(IndexOutOfBoundsException e){
+            System.out.println("ERROR: Chunks index out of bounds for spawn point");
+        }
+        catch(Exception e){
+            System.out.println("ERROR: error in spawn point");
+        }
 
         return new Vector2(0,0);
     }

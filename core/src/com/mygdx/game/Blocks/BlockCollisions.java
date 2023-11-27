@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 public class BlockCollisions {
 
+    //Change all names to include get
 
     /**
      * Finds all blocks that are colliding with the given box collider and
