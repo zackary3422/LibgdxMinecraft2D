@@ -3,7 +3,7 @@ package com.mygdx.game.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.Blocks.BlockCollisions;
+import com.mygdx.game.World.BlockCollisions;
 import com.mygdx.game.Components.Box2D;
 import com.mygdx.game.Components.Dimension;
 
@@ -23,28 +23,29 @@ public class Keyboard {
         if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
             deltaSpeed *= player.getShiftMultiplier();
 
+
+        /* ----- Keys ----- */
+
+
         //SPACE Key
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && !BlockCollisions.bottomCollisions(player.collidingBlocks, player.box2D).isEmpty()){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && player.box2D.bottomCollision(player.box2D)){
             player.setVerticalVelocity(Player.jumpForce);
-            player.setPosition(new Vector2(player.getX(), player.getY() + deltaSpeed));
         }
 
-        //D Key
-        if(Gdx.input.isKeyPressed(Input.Keys.D) && BlockCollisions.rightCollisions(player.collidingBlocks, new Box2D(new Vector2(player.getX(), player.getY()+2), new Dimension(player.getDimension().width,player.getDimension().height-2))).isEmpty())
-            player.setPosition(new Vector2(player.getX() + deltaSpeed, player.getY()));
 
         //A Key
-        if(Gdx.input.isKeyPressed(Input.Keys.A) && BlockCollisions.leftCollisions(player.collidingBlocks, new Box2D(new Vector2(player.getX(), player.getY()+2), new Dimension(player.getDimension().width,player.getDimension().height-2))).isEmpty())
-            player.setPosition(new Vector2(player.getX() - deltaSpeed, player.getY()));
+        if(Gdx.input.isKeyPressed(Input.Keys.A))
+            player.setHorizontalVelocity(-1 * deltaSpeed);
 
-        //S Key
-        if(Gdx.input.isKeyPressed(Input.Keys.S))
-            player.setPosition(new Vector2(player.getX(), player.getY() - deltaSpeed));
+        //D Key
+        if(Gdx.input.isKeyPressed(Input.Keys.D))
+            player.setHorizontalVelocity(deltaSpeed);
+
 
     }
 
-
-
-
+    public boolean isMovementKeysPressed(){
+        return Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.D);
+    }
 
 }

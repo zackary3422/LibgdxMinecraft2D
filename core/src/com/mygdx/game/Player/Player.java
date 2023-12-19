@@ -9,7 +9,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Components.Block;
 import com.mygdx.game.Components.Box2D;
 import com.mygdx.game.Components.Dimension;
-import com.mygdx.game.Blocks.BlockCollisions;
+import com.mygdx.game.Components.GameMath;
+import com.mygdx.game.World.BlockCollisions;
+import com.mygdx.game.World.World;
 
 import java.util.ArrayList;
 
@@ -44,7 +46,7 @@ public class Player {
     private float shiftMultiplier = 1.9f;
 
     /** The vertical force applied when jumping*/
-    static final float jumpForce = 300f;
+    static final float jumpForce = 7f;
 
     /** The players vertical velocity*/
     float verticalVelocity = 0;
@@ -53,7 +55,7 @@ public class Player {
     float horizontalVelocity = 0;
 
     /** Gravity applied to players velocity*/
-    float gravity = -580f;
+    float gravity = -20f;
 
     /** The list of blocks that are colliding with player*/
     public ArrayList<Block> collidingBlocks;
@@ -78,6 +80,7 @@ public class Player {
         position.x = spawnPoint.x;
         position.y = spawnPoint.y;
 
+
         dimension = new Dimension<Float>(sprite.getWidth(), sprite.getHeight());
 
         box2D = new Box2D(position, dimension);
@@ -89,11 +92,20 @@ public class Player {
      */
     public void update(){
 
+        //Get input
         keyboard.keyboardInput(this);
 
+        //Get blocks player is currently colliding with
         updateCollidingBlocks();
-        setPosition(position);
+
+        //Move player out of blocks
+        collisionUpdate();
+
+        //Apply velocities to move player
         applyVelocities();
+
+        //Update players position
+        setPosition(position);
     }
 
     /**
@@ -109,58 +121,68 @@ public class Player {
 
 
     /**
-     * Apply velocity to y-coordinate and stop movement if bottom of player is colliding with a block.
+     * Move player out of block using the SAT to separate block based on the shortest axis it would take
+     * to move a colliding object out of another object.
      */
-    public void applyVelocities(){
+    public void collisionUpdate()
+    {
 
-        //Subtracts the vertical velocity to apply gravity
-        verticalVelocity += gravity * Gdx.graphics.getDeltaTime();
-
-
-        //Set Velocities equal to zero if there's collision in the way
+        //Loop through all blocks colliding with player
+        for (Block collidingBlock : collidingBlocks) {
 
 
-        //Apply Velocities
+            //Get push distance and direction
+            World.Direction satDirection = box2D.satPushDirection(collidingBlock.getBox2D());
+            float pushDistance = box2D.satPushDistance(collidingBlock.getBox2D());
 
+            //Push horizontally
+           if(satDirection == World.Direction.RIGHT || satDirection == World.Direction.LEFT)
+               setPosition(new Vector2(position.x + pushDistance, position.y));
 
-        //If colliding in block with new position then readjust
+           //Push vertically
+           if(satDirection == World.Direction.DOWN || satDirection == World.Direction.UP)
+               setPosition(new Vector2(position.x , position.y + pushDistance));
 
-        //Move player down if there's nothing below
-        if(BlockCollisions.bottomCollisions(collidingBlocks, box2D).isEmpty())
-            position.y += verticalVelocity * Gdx.graphics.getDeltaTime();
-        else
-        {//Stop player from moving down and move player to bottom blocks position
-            verticalVelocity = 0;
-            setPosition(new Vector2(position.x, BlockCollisions.bottomCollisions(collidingBlocks, box2D).get(0).getY() + BlockCollisions.bottomCollisions(collidingBlocks, box2D).get(0).getHeight()));
+            //Find blocks colliding with player in new position
+            updateCollidingBlocks();
         }
-
 
     }
 
+    /**
+     * Apply Vertical Velocities
+     */
+    public void applyVelocities()
+    {
+
+        //Adds negative gravity to player vertical velocity moving it downwards
+        verticalVelocity += gravity * Gdx.graphics.getDeltaTime();
+
+        //Set vertical velocity to zero if there's bottom collision and player is moving downward
+        if(!BlockCollisions.getBottomCollisions(collidingBlocks, box2D).isEmpty() && verticalVelocity < 0)
+            verticalVelocity = 0;
+
+        //Set horizontal velocity to zero if there's bottom collision and player isn't pressing key
+        if(!BlockCollisions.getBottomCollisions(collidingBlocks, box2D).isEmpty() && !keyboard.isMovementKeysPressed())
+            horizontalVelocity = 0;
+
+        //Apply velocities to players position
+        setPosition(new Vector2(position.x + horizontalVelocity, position.y + verticalVelocity));
+    }
 
     /**
      * Update collidingBlocks list for new blocks colliding with player.
      */
-    public void updateCollidingBlocks(){
+    public void updateCollidingBlocks()
+    {
 
         //Get list of blocks colliding with player
-        collidingBlocks = BlockCollisions.collidingBlocks(box2D);
+        collidingBlocks = BlockCollisions.getCollidingBlocks(box2D);
 
         //Filter out un-collidable blocks
         BlockCollisions.filter(collidingBlocks);
     }
 
-    /**
-     * Sets a new position for player coordinates, sprite, box2D, and camera.
-     *
-     * @param newPosition the vector for the new position of player
-     */
-    public void setPosition(Vector2 newPosition){
-        position = newPosition;
-        sprite.setPosition(position.x, position.y);
-        camera.position.set(position.x, position.y,0);
-        box2D.setPosition(position);
-    }
 
 
     /* ----- ACCESSORS ----- */
@@ -198,6 +220,15 @@ public class Player {
 
     public Dimension<Float> getDimension(){return dimension;}
 
+    public float getWidth(){
+        return dimension.width;
+    }
+
+    public float getHeight(){
+        return dimension.height;
+    }
+
+
     /* ----- MUTATORS ----- */
     public void setVerticalVelocity(float velocity){
         verticalVelocity = velocity;
@@ -206,4 +237,17 @@ public class Player {
     public void setHorizontalVelocity(float velocity){
         horizontalVelocity = velocity;
     }
+
+    /**
+     * Sets a new position for player coordinates, sprite, box2D, and camera.
+     *
+     * @param newPosition the vector for the new position of player
+     */
+    public void setPosition(Vector2 newPosition){
+        position = newPosition;
+        sprite.setPosition(position.x, position.y);
+        camera.position.set(position.x, position.y,0);
+        box2D.setPosition(position);
+    }
+
 }

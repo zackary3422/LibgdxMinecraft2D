@@ -162,5 +162,9 @@ public abstract class Block {
     public boolean isCollidable(){
         return collidable;
     }
+
+    public Box2D getBox2D(){
+        return box2D;
+    }
 }
 

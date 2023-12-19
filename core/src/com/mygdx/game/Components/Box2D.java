@@ -1,6 +1,7 @@
 package com.mygdx.game.Components;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.World.World;
 
 public class Box2D {
 
@@ -154,6 +155,125 @@ public class Box2D {
 
     }
 
+
+    /* ----- Collision Resolution ------ */
+
+    /**
+     * Calculate the shortest distance to move box's out of each other using the SAT to separate block based on the shortest axis it would take
+     * to move a colliding object out of another object.
+     * @param box2D the colliding block to calculate minimum distance to move out of
+     * @return the minimum distance required to move the box's out of each other
+     */
+    public float satPushDistance(Box2D box2D)
+    {
+
+        //Calculate X Overlap
+        float min1 = position.x;
+        float max1 = position.x + dimension.width;
+        float min2 = box2D.getX();
+        float max2 = box2D.getX() + box2D.getWidth();
+        float xOverlap = GameMath.getOverlap(min1, max1, min2, max2);
+
+        //Calculate Y Overlap
+        min1 = position.y;
+        max1 = position.y + dimension.height;
+        min2 = box2D.getY();
+        max2 = box2D.getY() + box2D.getHeight();
+        float yOverlap = GameMath.getOverlap(min1, max1, min2, max2);
+
+
+        //Compare to find which one is shortest to apply
+
+        // If X-Overlap is shorter move horizontally out of block
+        if (xOverlap < yOverlap)
+        {
+            //Move Left
+            if (position.x < box2D.getX())
+            {
+                return -1 * xOverlap;
+            }
+            //Move Right
+            else
+            {
+                return xOverlap;
+            }
+        }
+
+        //If Y-Overlap is shorter move vertically out of block
+        else if (xOverlap > yOverlap)
+        {
+            //Move Down
+            if (position.y < box2D.getY())
+            {
+                return -1 * yOverlap;
+            }
+            //Move Up
+            else
+            {
+                return yOverlap;
+            }
+        }
+
+
+        return -1;
+    }
+
+    /**
+     * Find the direction for the shortest distance ot move out of.
+     * @param box2D the colliding block to calculate distance to move out of
+     * @return the direction of the minimum distance
+     */
+    public World.Direction satPushDirection(Box2D box2D)
+    {
+        //Calculate X Overlap
+        float min1 = position.x;
+        float max1 = position.x + dimension.width;
+        float min2 = box2D.getX();
+        float max2 = box2D.getX() + box2D.getWidth();
+        float xOverlap = GameMath.getOverlap(min1, max1, min2, max2);
+
+        //Calculate Y Overlap
+        min1 = position.y;
+        max1 = position.y + dimension.height;
+        min2 = box2D.getY();
+        max2 = box2D.getY() + box2D.getHeight();
+        float yOverlap = GameMath.getOverlap(min1, max1, min2, max2);
+
+
+        //Compare to find which one is shortest to apply
+
+        // If X-Overlap is shorter move horizontally out of block
+        if (xOverlap < yOverlap)
+        {
+            //Move Left
+            if (position.x < box2D.getX())
+            {
+                return World.Direction.LEFT;
+            }
+            //Move Right
+            else
+            {
+                return World.Direction.RIGHT;
+            }
+        }
+
+        //If Y-Overlap is shorter move vertically out of block
+        else if (xOverlap > yOverlap)
+        {
+            //Move Down
+            if (position.y < box2D.getY())
+            {
+                return World.Direction.DOWN;
+            }
+            //Move Up
+            else
+            {
+                return World.Direction.UP;
+            }
+        }
+
+        return null;
+    }
 
     /* ----- ACCESSORS ----- */
 

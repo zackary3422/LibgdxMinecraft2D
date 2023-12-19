@@ -88,5 +88,10 @@ public class World{
         return new Vector2(0,0);
     }
 
+    public static ArrayList<Chunk> getChunks(){
+        return chunks;
+    }
+
+
 
 }
