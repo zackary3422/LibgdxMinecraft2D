@@ -26,9 +26,9 @@ public class Box2D {
     /* ----- COLLISION DETECTION ----- */
 
     /**
-     * Checks if this box2D is colliding with given box2D
+     * Checks if given box2D is colliding with this box2D
      * @param box2D the box2D to check if this box2D is colliding with
-     * @return the boolean if this block is colliding with given box2D
+     * @return boolean determining if given box2D is colliding with box2D
      */
     public boolean isColliding(Box2D box2D){
 
@@ -55,7 +55,9 @@ public class Box2D {
     }
 
     /**
-     *
+     * Checks if given box2D is colliding with the left side of this box2D
+     * @param box2D the box2D to check if it's colliding with the left side of this box2D
+     * @return boolean determining if given box2D is colliding on left side of this box2D
      */
     public boolean leftCollision(Box2D box2D){
 
@@ -80,7 +82,9 @@ public class Box2D {
 
 
     /**
-     *
+     * Checks if given box2D is colliding with the right side of this box2D
+     * @param box2D the box2D to check if it's colliding with the right side of this box2D
+     * @return boolean determining if given box2D is colliding on right side of this box2D
      */
     public boolean rightCollision(Box2D box2D){
 
@@ -105,7 +109,9 @@ public class Box2D {
 
 
     /**
-     *
+     * Checks if given box2D is colliding with the bottom side of this box2D
+     * @param box2D the box2D to check if it's colliding with the bottom side of this box2D
+     * @return boolean determining if given box2D is colliding on bottom side of this box2D
      */
     public boolean bottomCollision(Box2D box2D){
 
@@ -130,7 +136,9 @@ public class Box2D {
     }
 
     /**
-     *
+     * Checks if given box2D is colliding with the top side of this box2D
+     * @param box2D the box2D to check if it's colliding with the top side of this box2D
+     * @return boolean determining if given box2D is colliding on top side of this box2D
      */
     public boolean topCollision(Box2D box2D){
 
@@ -172,14 +180,14 @@ public class Box2D {
         float max1 = position.x + dimension.width;
         float min2 = box2D.getX();
         float max2 = box2D.getX() + box2D.getWidth();
-        float xOverlap = GameMath.getOverlap(min1, max1, min2, max2);
+        float xOverlap = getOverlap(min1, max1, min2, max2);
 
         //Calculate Y Overlap
         min1 = position.y;
         max1 = position.y + dimension.height;
         min2 = box2D.getY();
         max2 = box2D.getY() + box2D.getHeight();
-        float yOverlap = GameMath.getOverlap(min1, max1, min2, max2);
+        float yOverlap = getOverlap(min1, max1, min2, max2);
 
 
         //Compare to find which one is shortest to apply
@@ -230,14 +238,14 @@ public class Box2D {
         float max1 = position.x + dimension.width;
         float min2 = box2D.getX();
         float max2 = box2D.getX() + box2D.getWidth();
-        float xOverlap = GameMath.getOverlap(min1, max1, min2, max2);
+        float xOverlap = getOverlap(min1, max1, min2, max2);
 
         //Calculate Y Overlap
         min1 = position.y;
         max1 = position.y + dimension.height;
         min2 = box2D.getY();
         max2 = box2D.getY() + box2D.getHeight();
-        float yOverlap = GameMath.getOverlap(min1, max1, min2, max2);
+        float yOverlap = getOverlap(min1, max1, min2, max2);
 
 
         //Compare to find which one is shortest to apply
@@ -291,6 +299,11 @@ public class Box2D {
 
     public float getHeight(){
         return dimension.height;
+    }
+
+    public static float getOverlap(float min1, float max1, float min2, float max2){
+
+        return Math.max(0, Math.min(max1, max2) - Math.max(min1, min2));
     }
 
     /* ----- MUTATORS ----- */

@@ -35,8 +35,7 @@ public class Minecraft2D extends ApplicationAdapter {
 
 		window.draw(batch);
 		window.update();
-		//System.out.println(Gdx.graphics.getFramesPerSecond());
-
+		System.out.println(Gdx.graphics.getFramesPerSecond());
 	}
 	
 	@Override

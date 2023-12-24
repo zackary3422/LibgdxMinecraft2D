@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Components.Block;
 import com.mygdx.game.Components.Box2D;
 import com.mygdx.game.Components.Dimension;
-import com.mygdx.game.Components.GameMath;
 import com.mygdx.game.World.BlockCollisions;
 import com.mygdx.game.World.World;
 
@@ -30,8 +29,8 @@ public class Player {
     /** The sprite of the player to draw it*/
     Sprite sprite;
 
-    /** The keyboard for player keyboard input*/
-    Keyboard keyboard;
+    /** The input for player input */
+    Input input;
 
     /** The box collider for the player*/
     public Box2D box2D;
@@ -39,14 +38,7 @@ public class Player {
     /** The camera of the player*/
     OrthographicCamera camera;
 
-    /** The player movement speed*/
-    private float playerSpeed = 200;
 
-    /** The speed multiplier when sprinting*/
-    private float shiftMultiplier = 1.9f;
-
-    /** The vertical force applied when jumping*/
-    static final float jumpForce = 7f;
 
     /** The players vertical velocity*/
     float verticalVelocity = 0;
@@ -60,6 +52,8 @@ public class Player {
     /** The list of blocks that are colliding with player*/
     public ArrayList<Block> collidingBlocks;
 
+    public ArrayList<Block> bottomCollidingBlocks;
+
 
     /**
      * Constructs a new Player and initializes variables and sets position of sprite.
@@ -69,31 +63,38 @@ public class Player {
      */
     public Player(Vector2 spawnPoint, OrthographicCamera camera){
 
+        //Set camera
         this.camera = camera;
         viewPort = new Dimension<Float>(camera.viewportWidth, camera.viewportHeight);
 
+        //Init player sprite
         sprite = new Sprite(new Texture("Steve.png"));
-        keyboard = new Keyboard();
+
+        //Init player input
+        input = new Input();
 
         //Set player position
         position = new Vector2();
         position.x = spawnPoint.x;
         position.y = spawnPoint.y;
 
-
+        //Set dimensions of player
         dimension = new Dimension<Float>(sprite.getWidth(), sprite.getHeight());
 
+        //Init box collider of player
         box2D = new Box2D(position, dimension);
+
+        //Set player position
         setPosition(position);
     }
 
     /**
-     * Executes necessary logic for player class to work. Handles keyboard input.
+     * Executes necessary logic for player class to work.
      */
     public void update(){
 
         //Get input
-        keyboard.keyboardInput(this);
+        input.keyboardInput(this);
 
         //Get blocks player is currently colliding with
         updateCollidingBlocks();
@@ -163,7 +164,7 @@ public class Player {
             verticalVelocity = 0;
 
         //Set horizontal velocity to zero if there's bottom collision and player isn't pressing key
-        if(!BlockCollisions.getBottomCollisions(collidingBlocks, box2D).isEmpty() && !keyboard.isMovementKeysPressed())
+        if(!BlockCollisions.getBottomCollisions(collidingBlocks, box2D).isEmpty() && !input.isMovementKeysPressed())
             horizontalVelocity = 0;
 
         //Apply velocities to players position
@@ -179,13 +180,15 @@ public class Player {
         //Get list of blocks colliding with player
         collidingBlocks = BlockCollisions.getCollidingBlocks(box2D);
 
+
+
         //Filter out un-collidable blocks
         BlockCollisions.filter(collidingBlocks);
     }
 
 
-
     /* ----- ACCESSORS ----- */
+
     public float getX(){
         return position.x;
     }
@@ -197,14 +200,6 @@ public class Player {
     public float getCenterX(){return position.x + (dimension.width / 2);}
 
     public float getCenterY(){return position.y + (dimension.height / 2);}
-
-    public float getPlayerSpeed(){
-        return playerSpeed;
-    }
-
-    public float getShiftMultiplier(){
-        return shiftMultiplier;
-    }
 
     public float getVerticalVelocity(){
         return verticalVelocity;
@@ -240,7 +235,6 @@ public class Player {
 
     /**
      * Sets a new position for player coordinates, sprite, box2D, and camera.
-     *
      * @param newPosition the vector for the new position of player
      */
     public void setPosition(Vector2 newPosition){
