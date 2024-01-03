@@ -35,7 +35,6 @@ public class Chunk {
     }
 
 
-
     /**
      * Draws the chunk blocks onto the screen if they are visible to player
      * @param batch the drawer

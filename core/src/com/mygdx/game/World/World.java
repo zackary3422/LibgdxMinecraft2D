@@ -31,7 +31,6 @@ public class World{
 
     int spawnPointID = 0;
 
-
     /**
      * Constructs a new World of Blocks and populates the arraylist
      *
@@ -43,8 +42,6 @@ public class World{
         chunks = TerrainGenerator.newWorld();
     }
 
-
-
     /**
      * Called every frame to update world blocks. Used to expand world as player explores.
      *
@@ -55,6 +52,7 @@ public class World{
         TerrainGenerator.chunkExpander(player.getPosition(), chunks);
 
     }
+
     /**
      * Draws all the blocks in the {@code blocks} list
      *

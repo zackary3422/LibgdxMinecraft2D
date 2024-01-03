@@ -35,11 +35,6 @@ public class Player {
     /** The box collider for the player*/
     public Box2D box2D;
 
-    /** The camera of the player*/
-    OrthographicCamera camera;
-
-
-
     /** The players vertical velocity*/
     float verticalVelocity = 0;
 
@@ -59,13 +54,8 @@ public class Player {
      * Constructs a new Player and initializes variables and sets position of sprite.
      *
      * @param spawnPoint the x and y coordinates for the spawn point of the player
-     * @param camera the camera for the player
      */
-    public Player(Vector2 spawnPoint, OrthographicCamera camera){
-
-        //Set camera
-        this.camera = camera;
-        viewPort = new Dimension<Float>(camera.viewportWidth, camera.viewportHeight);
+    public Player(Vector2 spawnPoint){
 
         //Init player sprite
         sprite = new Sprite(new Texture("Steve.png"));
@@ -240,7 +230,6 @@ public class Player {
     public void setPosition(Vector2 newPosition){
         position = newPosition;
         sprite.setPosition(position.x, position.y);
-        camera.position.set(position.x, position.y,0);
         box2D.setPosition(position);
     }
 

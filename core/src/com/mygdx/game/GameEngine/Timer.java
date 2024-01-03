@@ -1,4 +1,4 @@
-package com.mygdx.game.Components;
+package com.mygdx.game.GameEngine;
 
 public class Timer {
 

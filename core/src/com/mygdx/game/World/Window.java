@@ -3,18 +3,19 @@ package com.mygdx.game.World;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Blocks.BlockTextures;
+import com.mygdx.game.Components.GameObject;
 import com.mygdx.game.Player.Player;
+import java.util.ArrayList;
 
 /**
- * The {@code Window} class draws sprites onto screen and handles game logic.
+ * The {@code Window} class handles drawing every game objects onto the screen
  *
  */
 public class Window {
 
-    World world;
-    Player player;
+    public SpriteBatch batch;
 
-    OrthographicCamera camera;
+    public static OrthographicCamera camera;
 
     public static int width, height;
 
@@ -35,38 +36,28 @@ public class Window {
         Window.width = width;
         Window.height = height;
 
-        //Initializing objects
-        world = new World();
-        player = new Player(world.spawnPoint(), camera);
+        batch = new SpriteBatch();
 
     }
 
+
     /**
-     * Draws all sprites onto screen
      *
-     * @param batch used to draw sprites onto screen
      */
-    public void draw(SpriteBatch batch){
+    public void draw(ArrayList<GameObject> gameObjects){
 
-        world.draw(batch, player);
-        player.draw(batch);
+        batch.begin();
 
+        for(GameObject object : gameObjects)
+            object.getSprite().draw(batch);
+
+        batch.end();
 
         batch.setProjectionMatrix(camera.combined);
-    }
-
-    /**
-     * Calls all necessary update methods
-     *
-     */
-    public void update(){
-
-        player.update();
-        world.update(player);
         camera.update();
-
     }
 
 
+    //Input Function that takes in keyboard interface
 
 }

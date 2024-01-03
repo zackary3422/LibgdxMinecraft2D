@@ -21,28 +21,28 @@ public class Input {
     public void keyboardInput(Player player){
 
         //Gets accurate player speed based on delta time
-        float deltaSpeed = (Gdx.graphics.getDeltaTime() * player.getPlayerSpeed());
+        //float deltaSpeed = (Gdx.graphics.getDeltaTime() * player.getPlayerSpeed());
 
         //Shift Key
-        if(Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.SHIFT_LEFT))
-            deltaSpeed *= player.getShiftMultiplier();
+      //  if(Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.SHIFT_LEFT))
+           // deltaSpeed *= player.getShiftMultiplier();
 
 
         /* ----- Keys ----- */
 
         //SPACE Key
-        if(Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.SPACE) && player.box2D.bottomCollision(player.box2D)){
-            player.setVerticalVelocity(Player.jumpForce);
-        }
+      //  if(Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.SPACE) && player.box2D.bottomCollision(player.box2D)){
+         //   player.setVerticalVelocity(Player.jumpForce);
+      //  }
 
 
         //A Key
-        if(Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.A))
-            player.setHorizontalVelocity(-1 * deltaSpeed);
+        //if(Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.A))
+          //  player.setHorizontalVelocity(-1 * deltaSpeed);
 
         //D Key
-        if(Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.D))
-            player.setHorizontalVelocity(deltaSpeed);
+      //  if(Gdx.input.isKeyPressed(com.badlogic.gdx.Input.Keys.D))
+           // player.setHorizontalVelocity(deltaSpeed);
 
 
     }
