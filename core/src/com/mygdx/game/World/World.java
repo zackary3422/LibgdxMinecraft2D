@@ -1,12 +1,11 @@
 package com.mygdx.game.World;
 
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.Blocks.BlockID;
-import com.mygdx.game.Blocks.BlockTextures;
-import com.mygdx.game.Components.Block;
-import com.mygdx.game.Player.Player;
+import com.mygdx.game.Blocks.Block;
+import com.mygdx.game.GameEngine.Movement;
+import com.mygdx.game.GameEngine.Player;
+import com.mygdx.game.World.Chunks.Chunk;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -16,7 +15,6 @@ import java.util.ArrayList;
  *  all the blocks in a 2D arraylist and this class can be used to access the worlds blocks
  *  and to edit them.
  */
-
 public class World{
 
 
@@ -26,20 +24,14 @@ public class World{
     /** The size of a chunk(segment of the world) in blocks*/
     public static final Dimension CHUNK_SIZE = new Dimension(16, 60);
 
-    /** */
-    public enum Direction {LEFT, RIGHT, UP, DOWN}
-
-    int spawnPointID = 0;
 
     /**
      * Constructs a new World of Blocks and populates the arraylist
-     *
      */
     public World(){
-        BlockTextures.initBlockTextures();
 
         chunks = new ArrayList<Chunk>();
-        chunks = TerrainGenerator.newWorld();
+        ChunkGenerator.createStartingChunk(chunks);
     }
 
     /**
@@ -49,20 +41,32 @@ public class World{
      */
     public void update(Player player){
 
-        TerrainGenerator.chunkExpander(player.getPosition(), chunks);
+        worldExpansion(player);
+
+
+    }
+
+    public void worldExpansion(Player player){
+
+        //Find which side needs to be expanded if necessary
+        //Generate that chunk and link it to arraylist
+
+        if(player.getPosition().x - com.mygdx.game.GameEngine.Window.camera.viewportWidth < (chunks.get(0).getXPosition() * Block.BLOCK_LENGTH)){//Left
+            ChunkGenerator.chunkExpander(chunks, Movement.Direction.LEFT);
+        } else if(player.getPosition().x + com.mygdx.game.GameEngine.Window.camera.viewportWidth > (chunks.get(chunks.size()-1).getXPosition() * Block.BLOCK_LENGTH)){
+            ChunkGenerator.chunkExpander(chunks, Movement.Direction.RIGHT);
+        }
+
 
     }
 
     /**
-     * Draws all the blocks in the {@code blocks} list
+     * Sets all chunks not within range to be invisible if not all ready
      *
-     * @param batch the SpriteBatch to draw sprites onto screen
      */
-    public void draw(SpriteBatch batch, Player player){
+    public void chunkDrawer(){
 
-       for(int i = 0; i < chunks.size(); i++)
-           if(chunks.get(i).isVisible(player.getPosition(), player.getViewPort()))
-                chunks.get(i).draw(batch, player.getPosition(), player.getViewPort());
+
 
     }
 
@@ -72,7 +76,7 @@ public class World{
      *
      * @return a vector2 with x and y coordinate
      */
-    public Vector2 spawnPoint(){
+    public Vector2 getSpawnPoint(){
         try{
             return chunks.get(0).getSpawnPoint();
         }
@@ -86,9 +90,7 @@ public class World{
         return new Vector2(0,0);
     }
 
-    public static ArrayList<Chunk> getChunks(){
-        return chunks;
-    }
+
 
 
 

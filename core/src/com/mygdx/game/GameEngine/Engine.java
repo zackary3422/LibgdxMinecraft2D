@@ -1,66 +1,135 @@
 package com.mygdx.game.GameEngine;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.mygdx.game.Components.GameObject;
-import com.mygdx.game.Components.Time;
-import com.mygdx.game.Player.Player;
-import com.mygdx.game.World.Window;
 
 import java.util.ArrayList;
 
 
+/**
+ *
+ */
 public class Engine {
 
 
     /** */
-    public Window window;
+    public static Window window;
+
+    /** List of all game objects within game*/
+    public static ArrayList<GameObject> gameObjects;
 
     /** */
-    ArrayList<Input> inputs;
+    public static ArrayList<Player> players;
 
-    /** Collisions*/
+    /** List of game objects that will be drawn to screen*/
+    public static ArrayList<GameObject> objectsToBeDrawn;
 
-    //Objects to be drawn
-    ArrayList<GameObject> gameObjects;
+    /** Objects with defined input*/
+    public static ArrayList<GameObject> objectsWithInput;
 
-    ArrayList<Player> players;
+    /** Objects with defined logic to be updated */
+    public static ArrayList<GameObject> objectsWithLogic;
 
 
-
+    /** */
     public Engine(int width, int height){
 
-        window = new Window(width, height);
+        gameObjects = new ArrayList<GameObject>();
+        objectsWithInput = new ArrayList<GameObject>();
+        objectsWithLogic = new ArrayList<GameObject>();
+        objectsToBeDrawn = new ArrayList<GameObject>();
+        players = new ArrayList<Player>();
 
+        window = new Window(width, height);
     }
+
+    /* ----- ENGINE UPDATERS ----- */
 
     /** */
     public void update(){
 
-        window.draw(gameObjects);
+        //Draw every game object onto the screen
+        window.draw(objectsToBeDrawn);
 
+        //Updates all game objects input
+        inputUpdate();
 
-
+        //Updates all game objects logic
+        logicUpdate();
 
         Time.incrementTime();
 
-        System.out.println(Gdx.graphics.getFramesPerSecond());
+       // System.out.println(Gdx.graphics.getFramesPerSecond());
+    }
+
+    /** */
+    public void inputUpdate(){
+
+        for(GameObject input : objectsWithInput)
+            input.input();
+
+    }
+
+    /** */
+    public void logicUpdate(){
+        for(GameObject object : objectsWithLogic)
+            object.logic();
     }
 
 
+    /* ----- LIST CONTROL METHODS ----- */
 
-
-    public void add(GameObject object){
+    /** */
+    public static void add(GameObject object){
         gameObjects.add(object);
     }
 
-    public void add(Player player){
-        players.add(player);
+    /** */
+    public static void addInput(GameObject object){
+        objectsWithInput.add(object);
     }
 
-    public void delete(GameObject object) {
-        if(!gameObjects.remove(object))
-            System.out.println("ERROR: game object not found within window class");
+    /** */
+    public static void addLogic(GameObject object){
+        objectsWithLogic.add(object);
+    }
+
+    /** */
+    public static void startDrawing(GameObject object){
+        if(object.sprite != null)
+            objectsToBeDrawn.add(object);
+    }
+
+    /** */
+    public static void sendToFront(){
+
+    }
+
+    /** */
+    public static void sendToBack(){
+
+    }
+
+    /** */
+    public static void stopDrawing(GameObject object){
+        objectsToBeDrawn.remove(object);
+    }
+
+    /** */
+    public static void delete(GameObject object) {
+        gameObjects.remove(object);
+        objectsWithInput.remove(object);
+        objectsWithLogic.remove(object);
+        objectsToBeDrawn.remove(object);
+    }
+
+    /** Set focus of camera on game object? */
+    public void setFocus(GameObject objectFocus){
+
+    }
+
+    /** Dispose of all resources*/
+    public void dispose(){
+        window.batch.dispose();
     }
 
 }

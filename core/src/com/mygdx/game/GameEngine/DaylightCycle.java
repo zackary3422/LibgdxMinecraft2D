@@ -1,7 +1,6 @@
-package com.mygdx.game.Components;
+package com.mygdx.game.GameEngine;
 
 import com.badlogic.gdx.graphics.Color;
-import com.mygdx.game.Components.Time;
 
 public class DaylightCycle {
 
@@ -17,7 +16,7 @@ public class DaylightCycle {
 
     static public Color currentDayColor(){
 
-        float radianTime = Time.getCurrentTime() * (float)((2 * Math.PI) / Time.timeInDay);
+        float radianTime = Time.getCurrentTime() * (float)((2 * PI) / Time.timeInDay);
 
         float cosTime = Math.min((float) Math.cos(radianTime) + 0.3f, 1f);
 

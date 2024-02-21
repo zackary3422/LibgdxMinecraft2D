@@ -1,44 +1,39 @@
 package com.mygdx.game.World;
 
-import com.badlogic.gdx.graphics.g3d.particles.influencers.DynamicsModifier;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Blocks.*;
-import com.mygdx.game.Components.Block;
-import com.mygdx.game.Player.Player;
+import com.mygdx.game.Blocks.Block;
+import com.mygdx.game.GameEngine.Movement;
+import com.mygdx.game.GameEngine.Window;
+import com.mygdx.game.World.Chunks.Chunk;
+import com.mygdx.game.World.Chunks.ForestChunk;
+
 import java.util.Random;
 import java.util.ArrayList;
 
 /**
  * The {@code TerrainGenerator} class is a tool for generating and expanding the world's
  * arraylist of blocks.
- *
  */
 public class TerrainGenerator {
 
     /* ----- TERRAIN GENERATION VARS ----- */
 
+    //Move Terrain Generation into Chunk Super Class
+
+    //IMPROVE LAYERING AND BREAK THIS UP
+
+    /* ----- LAYERING VARS ----- */
+
+    //NOT TRUE FOR ALL BIOMES
     /** The levels in which grass blocks are created*/
     static final int[] GRASS_LEVEL = {32, 45};
 
-    /** The number of dirt blocks to put under a grass block*/
-    static final int DIRT_LAYERS = 4;
+    /* ----- BIOME VARS ----- */
 
-    /** The levels in which dirt blocks are created*/
-    static final int[] DIRT_LEVEL = {GRASS_LEVEL[0]-1 - DIRT_LAYERS, GRASS_LEVEL[0]-1};
-
-    /** The levels in which stone blocks are created*/
-    static final int[] STONE_LEVEL = {0, DIRT_LEVEL[0]-1};
-
-    /**The types of biomes in the world*/
-    public enum Biomes {FOREST, MOUNTAIN, DESSERT}
-
-    /** The percentile chance of a new biome being of certain biome. Ex: Biomes forest has 50% chance to spawn*/
-    public static float[] BiomesSpawnChance = {0.5f, 0.3f, 0.2f};
 
     /** The minimum number of chunks a biome needs before switching to a new one*/
     public static final int minBiomeChunkSize = 6;
-
 
 
     /**
@@ -49,16 +44,16 @@ public class TerrainGenerator {
 
         ArrayList<Chunk> chunks = new ArrayList<Chunk>();
 
-        chunks.add(generateForestChunk(GRASS_LEVEL[0], 0));
+        chunks.add(new ForestChunk(0, GRASS_LEVEL[0]));
 
         //Generate right side of world
         for(int i = 0; i < 6; i++){
-            addChunk(chunks, generateForestChunk(chunks.get(chunks.size()-1).getRightSideTopLayer(), chunks.get(0).getID() + 1), World.Direction.RIGHT);
+            addChunk(chunks, new ForestChunk(i + 1, chunks.get(chunks.size()-1).getRightTopBlock()), Movement.Direction.RIGHT);
         }
 
         //Generate left side of world
         for(int i = 0; i < 6; i++){
-            addChunk(chunks, generateForestChunk(chunks.get(0).getLeftSideTopLayer(), chunks.get(0).getID() - 1), World.Direction.LEFT);
+           // addChunk(chunks, generateForestChunk(chunks.get(0).getLeftTopBlock()), Movement.Direction.LEFT);
         }
 
         //Return new
@@ -68,17 +63,37 @@ public class TerrainGenerator {
 
     /* ----- Chunk Creator and Modifiers ----- */
 
+
+    public static void chunkExpander(ArrayList<Chunk> chunks, Movement.Direction direction){
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Generates a chunk (segment of world)
      * @param biome the biome of the chunk to be generated
      * @param sideTopLayer the top layer of the chunk it will be linked to
      * @return the chunk that is generated
      */
-    public static Chunk generateChunk(Biomes biome, int sideTopLayer, int ID) {
+    public static Chunk generateChunk(Biome.BiomeTypes biome, int sideTopLayer) {
 
 
-        if(biome == Biomes.FOREST)
-            return generateForestChunk(sideTopLayer, ID);
+      //  if(biome == Biome.BiomeTypes.FOREST)
+        //    return generateForestChunk(sideTopLayer);
 
 
         return null;
@@ -91,7 +106,7 @@ public class TerrainGenerator {
      * @param linkChunk the chunk that is added to the chunkList
      * @param direction the side of the list where the new chunk will be added
      */
-    public static void addChunk(ArrayList<Chunk> chunkList, Chunk linkChunk, World.Direction direction){
+    public static void addChunk(ArrayList<Chunk> chunkList, Chunk linkChunk, Movement.Direction direction){
 
         if(linkChunk == null){
             System.out.println("ERROR: Tried to add a null chunk");
@@ -103,19 +118,19 @@ public class TerrainGenerator {
         Block tempBlock;
 
         //Adds the linkChunk to the right side of the chunkList
-        if(direction == World.Direction.RIGHT){
+        if(direction == Movement.Direction.RIGHT){
 
             //Used as a reference point to move all blocks in linkChunk to the right side of the right most chunk
             float rightMostX = chunkList.get(chunkList.size()-1).getRightMostX();
 
             //Loop through to change block positions
-            for(int i = 0; i < Chunk.CHUNK_SIZE.height; i++){
-                for(int j = 0; j < Chunk.CHUNK_SIZE.width; j++){
+            for(int i = 0; i < Chunk.blocksDimension.height; i++){
+                for(int j = 0; j < Chunk.blocksDimension.width; j++){
 
                     tempBlock = linkChunk.getBlock(j, i);
                     newX = ((j + 1) * Block.BLOCK_LENGTH) + rightMostX;
 
-                    tempBlock.setPosition(new Vector2(newX, tempBlock.getY()));
+                    tempBlock.setPosition(new Vector2(newX, tempBlock.getPosition().y));
                 }
             }
 
@@ -123,19 +138,19 @@ public class TerrainGenerator {
             chunkList.add(chunkList.size(), linkChunk);
         }
 
-        else if(direction == World.Direction.LEFT){
+        else if(direction == Movement.Direction.LEFT){
 
             //Used as a reference point to move all blocks in linkChunk to the left side of the left most chunk
             float leftMostX = chunkList.get(0).getLeftMostX();
 
             //Loop through to change block positions
-            for(int i = 0; i < Chunk.CHUNK_SIZE.height; i++){
-                for(int j = Chunk.CHUNK_SIZE.width-1; j >= 0; j--){
+            for(int i = 0; i < Chunk.blocksDimension.height; i++){
+                for(int j = Chunk.blocksDimension.width-1; j >= 0; j--){
 
                     tempBlock = linkChunk.getBlock(j, i);
-                    newX = leftMostX - ((Chunk.CHUNK_SIZE.width - j) * Block.BLOCK_LENGTH);
+                    newX = leftMostX - ((Chunk.blocksDimension.width - j) * Block.BLOCK_LENGTH);
 
-                    tempBlock.setPosition(new Vector2(newX, tempBlock.getY()));
+                    tempBlock.setPosition(new Vector2(newX, tempBlock.getPosition().y));
                 }
             }
 
@@ -155,23 +170,23 @@ public class TerrainGenerator {
      * and need it flipped to mirror on the left.
      * @param chunk the chunk that will be flipped
      */
-    public static void flipChunk(Chunk chunk){
+    public static void flipChunk(Chunk chunk){//Move into chunk class
 
         //block used for switching blocks in chunk
         Block tempBlock;
 
-        for(int i = 0; i < Chunk.CHUNK_SIZE.height; i++) {
-            for (int j = 0; j < Chunk.CHUNK_SIZE.width / 2; j++) {
+        for(int i = 0; i < Chunk.blocksDimension.height; i++) {
+            for (int j = 0; j < Chunk.blocksDimension.width / 2; j++) {
 
                 //Flip Blocks Positions
-                Vector2 tempPosition = chunk.getBlock(j, i).getVector();
-                chunk.getBlock(j, i).setPosition(chunk.getBlock((Chunk.CHUNK_SIZE.width-1) - j, i).getVector());
-                chunk.getBlock((Chunk.CHUNK_SIZE.width-1) - j, i).setPosition(tempPosition);
+                Vector2 tempPosition = chunk.getBlock(j, i).getPosition();
+                chunk.getBlock(j, i).setPosition(chunk.getBlock((Chunk.blocksDimension.width-1) - j, i).getPosition());
+                chunk.getBlock((Chunk.blocksDimension.width-1) - j, i).setPosition(tempPosition);
 
                 //Flip actual block in List
                 tempBlock = chunk.getBlock(j, i);//save block before switching
-                chunk.setBlock(j, i, chunk.getBlock((Chunk.CHUNK_SIZE.width-1) - j, i));//replace block
-                chunk.setBlock((Chunk.CHUNK_SIZE.width-1) - j, i, tempBlock);//replace block
+                chunk.setBlock(j, i, chunk.getBlock((Chunk.blocksDimension.width-1) - j, i));//replace block
+                chunk.setBlock((Chunk.blocksDimension.width-1) - j, i, tempBlock);//replace block
 
             }
         }
@@ -182,7 +197,7 @@ public class TerrainGenerator {
      * Adds chunks to the world as player approaches the sides of the world to keep world continous.
      * @param playerPosition the player position used to see if they're approaching edge of world
      */
-    public static void chunkExpander(Vector2 playerPosition, ArrayList<Chunk> chunks){
+    public static void chunkExpander(Vector2 playerPosition, ArrayList<Chunk> chunks){// PROBABLY SHOULDN'T BE IN CHUNK GENERATOR CLASS BUT MAYBE IN WORLD CLASS
 
             //Get left & right most positions of chunk
             float chunkLeftMostX = chunks.get(0).getLeftMostX();
@@ -194,11 +209,11 @@ public class TerrainGenerator {
 
             //Expand left
             if(playerLeftViewX < chunkLeftMostX )
-                addChunk(chunks, generateChunk(generateBiome(chunks, World.Direction.LEFT), chunks.get(0).getLeftSideTopLayer(), chunks.get(0).getID() - 1), World.Direction.LEFT);
+                addChunk(chunks, generateChunk(generateBiome(chunks, Movement.Direction.LEFT), chunks.get(0).getLeftTopBlock()), Movement.Direction.LEFT);
 
             //Expand right
             if(playerRightViewX > chunkRightMostX)
-                addChunk(chunks, generateChunk(generateBiome(chunks, World.Direction.RIGHT), chunks.get(chunks.size()-1).getRightSideTopLayer(), chunks.get(0).getID() + 1), World.Direction.RIGHT);
+                addChunk(chunks, generateChunk(generateBiome(chunks, Movement.Direction.RIGHT), chunks.get(chunks.size()-1).getRightTopBlock()), Movement.Direction.RIGHT);
 
     }
 
@@ -209,21 +224,13 @@ public class TerrainGenerator {
      * Generates a random biome and return it.
      * @return the random biome
      */
-    public static Biomes randomBiome(){
+    public static Biome.BiomeTypes randomBiome(){
 
         Random rand = new Random();
         float chance;
-        Biomes[] biomeArray = Biomes.values();
 
 
-        for(int i = 0; i < biomeArray.length; i++){
-            chance = rand.nextFloat();
-            if(chance <= BiomesSpawnChance[i])
-                return biomeArray[i];
-        }
-
-
-        return Biomes.FOREST;
+        return Biome.BiomeTypes.FOREST;
     }
 
     /**
@@ -231,12 +238,12 @@ public class TerrainGenerator {
      * @param chunks the list of chunks used to see previous biome types
      * @param direction the direction of where the biome should be placed
      */
-    public static Biomes generateBiome(ArrayList<Chunk> chunks, World.Direction direction){
+    public static Biome.BiomeTypes generateBiome(ArrayList<Chunk> chunks, Movement.Direction direction){
 
         int currentBiomeSize = 0;
 
         //Determine the previous biome
-        Biomes currentBiome = direction == World.Direction.LEFT ? chunks.get(0).getBiome() : chunks.get(chunks.size()-1).getBiome();
+        Biome.BiomeTypes currentBiome = direction == Movement.Direction.LEFT ? chunks.get(0).getBiome() : chunks.get(chunks.size()-1).getBiome();
 
         //Get current biome size
         for(int i = chunks.size()-1; i >= 0; i--)
@@ -260,7 +267,8 @@ public class TerrainGenerator {
      * @param sideTopLayer the top layer of the chunk next to where this chunk is being placed.
      * @return the generated forest chunk
      */
-    public static Chunk generateForestChunk(int sideTopLayer, int ID){
+    /*
+    public static Chunk generateForestChunk(int sideTopLayer){
 
         //The new world in a 2D arraylist
         ArrayList<ArrayList<Block>> blocks = new ArrayList<ArrayList<Block>>();
@@ -272,7 +280,7 @@ public class TerrainGenerator {
             blocks.add(new ArrayList<Block>());
 
             for (int j = 0; j < World.CHUNK_SIZE.width; j++)
-                blocks.get(i).add(new EmptyBlock(new Vector2(j * Block.BLOCK_LENGTH, i * Block.BLOCK_LENGTH)));
+                blocks.get(i).add(null);
         }
 
         //Populate world with blocks
@@ -281,8 +289,10 @@ public class TerrainGenerator {
         populateStone(blocks);
 
 
-        return new Chunk(blocks, Biomes.FOREST, ID);
+        return new Chunk(blocks, Biome.BiomeTypes.FOREST);
     }
+
+     */
 
 
 
@@ -337,10 +347,12 @@ public class TerrainGenerator {
 
     }
 
+    /*
     /**
      * Adds dirt underneath all grass blocks.
      * @param blocks the 2D list of block to add dirt blocks to.
      */
+    /*
     private static void populateDirt(ArrayList<ArrayList<Block>> blocks){
 
         //Add
@@ -349,7 +361,7 @@ public class TerrainGenerator {
                if(i > blocks.size()-4)
                     break;
 
-               if(blocks.get(i+1).get(j).getID() == BlockID.GRASSBLOCK)
+               if(blocks.get(i+1).get(j) != null && blocks.get(i+1).get(j).hasMatchingID(GrassBlock.id))//NULL EXCEPTION HERE
                    for(int z = 0; z < DIRT_LAYERS; z++) {
                        blocks.get(i - z).set(j, new DirtBlock(new Vector2(j * Block.BLOCK_LENGTH, (i - z) * Block.BLOCK_LENGTH)));
                    }
@@ -357,6 +369,7 @@ public class TerrainGenerator {
             }
 
     }
+    */
 
     /**
      * Adds stone underneath all dirt blocks all the way down to bottom of the blocks list.
@@ -367,12 +380,15 @@ public class TerrainGenerator {
         for(int i = blocks.size() - 2; i >= 0; i--){
             for(int j = 0; j < blocks.get(0).size(); j++){
 
+                if(blocks.get(i+1).get(j) == null)
+                    continue;
+
                 //If above block is dirt
-                boolean belowDirt = blocks.get(i+1).get(j).getID() == BlockID.DIRTBLOCK ||
-                                              blocks.get(i+1).get(j).getID() == BlockID.STONEBLOCK;
+                boolean belowDirt = blocks.get(i+1).get(j).hasMatchingID(DirtBlock.id) ||
+                                              blocks.get(i+1).get(j).hasMatchingID(StoneBlock.id);
 
                 //If current block is not dirt
-                boolean notDirtBlock = blocks.get(i).get(j).getID() != BlockID.DIRTBLOCK;
+                boolean notDirtBlock = !blocks.get(i).get(j).hasMatchingID(DirtBlock.id);
 
                 //If above block is dirt and the current block is not dirt then make it stone
                 if(belowDirt && notDirtBlock)

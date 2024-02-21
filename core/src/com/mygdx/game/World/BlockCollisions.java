@@ -1,9 +1,8 @@
 package com.mygdx.game.World;
 
-import com.mygdx.game.Components.Block;
-import com.mygdx.game.Components.Box2D;
-import com.mygdx.game.World.Chunk;
-import com.mygdx.game.World.World;
+import com.mygdx.game.Blocks.Block;
+import com.mygdx.game.GameEngine.Box2D;
+import com.mygdx.game.World.Chunks.Chunk;
 
 import java.util.ArrayList;
 
@@ -16,17 +15,17 @@ public class BlockCollisions {
      *
      * @param box2D the box collider that will be checked for collisions with all the blocks
      */
-    public static ArrayList<Block> getCollidingBlocks(Box2D box2D){
+    public static ArrayList<Block> getCollidingBlocks(Block[][] blocks, Box2D box2D){
 
         ArrayList<Block> colliders = new ArrayList<Block>();
 
-        for(Chunk chunk : World.chunks)
-            for (int i = 0; i < chunk.chunkBlocks.size(); i++)
-                for (int j = 0; j < chunk.chunkBlocks.get(0).size(); j++)
-                    if (chunk.chunkBlocks.get(i).get(j).box2D.isColliding(box2D))
-                        colliders.add(chunk.getBlock(j, i));
+        int columnLength = blocks.length;
+        int rowLength = blocks[0].length;
 
-
+        for (int i = 0; i < columnLength; i++)
+            for (int j = 0; j < rowLength; j++)
+                if (blocks[i][j].box2D.isColliding(box2D))
+                    colliders.add(blocks[i][j]);
 
         return colliders;
     }
@@ -113,7 +112,7 @@ public class BlockCollisions {
     public static void filter(ArrayList<Block> collidingBlocks){
 
         for (int i = 0; i < collidingBlocks.size(); i++)
-            if(!collidingBlocks.get(i).isCollidable())
+            if(!collidingBlocks.get(i).collidable)
             {
                 collidingBlocks.remove(i);
                 i--;
