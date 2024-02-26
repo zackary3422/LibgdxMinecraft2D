@@ -1,6 +1,7 @@
 package com.mygdx.game.GameEngine;
 
 import com.badlogic.gdx.Gdx;
+import com.mygdx.game.Blocks.DirtBlock;
 
 import java.util.ArrayList;
 
@@ -95,19 +96,59 @@ public class Engine {
 
     /** */
     public static void startDrawing(GameObject object){
-        if(object.sprite != null)
-            objectsToBeDrawn.add(object);
+
+        if(object.sprite == null)
+            return;
+
+        int size = objectsToBeDrawn.size();
+
+        //Insert object into list based on priority drawing
+        for(int i = 0; i < size; i++){
+
+            if(object.drawPriority <= objectsToBeDrawn.get(i).drawPriority) {
+                objectsToBeDrawn.add(i, object);
+                return;
+            }
+            else if(i == size-1){
+                objectsToBeDrawn.add(object);
+                return;
+            }
+        }
+
+        objectsToBeDrawn.add(object);
+
+
     }
 
     /** */
-    public static void sendToFront(){
+    public static void changeDrawPriority(GameObject object, int newPriority){
+
+        objectsToBeDrawn.remove(object);
+
+        object.drawPriority = newPriority;
+
+        if(object.sprite == null)
+            return;
+
+        int size = objectsToBeDrawn.size();
+
+        //Insert object into list based on priority drawing
+        for(int i = 0; i < size; i++){
+
+            if(object.drawPriority <= objectsToBeDrawn.get(i).drawPriority) {
+                objectsToBeDrawn.add(i, object);
+                return;
+            }
+            else if(i == size-1){
+                objectsToBeDrawn.add(object);
+                return;
+            }
+        }
+
+        objectsToBeDrawn.add(object);
 
     }
 
-    /** */
-    public static void sendToBack(){
-
-    }
 
     /** */
     public static void stopDrawing(GameObject object){

@@ -26,7 +26,7 @@ public class Player extends GameObject {
     public ArrayList<Block> collidingBlocks;
 
     /*** The player movement speed*/
-    private float playerSpeed = 200;
+    private float playerSpeed = 10;
 
     /*** The speed multiplier when sprintin */
     private float shiftMultiplier = 1.9f;
@@ -42,6 +42,8 @@ public class Player extends GameObject {
 
         super(position, sprite, id);
 
+        Engine.changeDrawPriority(this, 1);
+
         enableInput();
         enableLogic();
 
@@ -55,6 +57,8 @@ public class Player extends GameObject {
         setPosition(position);
         setPosition(new Vector2(0,0));
         Window.camera.position.set(0, 0, 0);
+
+
     }
 
     /**
@@ -81,20 +85,20 @@ public class Player extends GameObject {
     public void input() {
 
         if(Gdx.input.isKeyPressed(Input.Keys.D)) {
-            setPosition(Movement.move(getPosition(), Movement.Direction.RIGHT, 10f));
+            setPosition(Movement.move(getPosition(), Movement.Direction.RIGHT, playerSpeed));
           //  movement.horizontalVelocity = movement.getDeltaSpeed(playerSpeed);
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.A)) {
-            setPosition(Movement.move(getPosition(), Movement.Direction.LEFT, 10f));
+            setPosition(Movement.move(getPosition(), Movement.Direction.LEFT, playerSpeed));
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.W)) {
-            setPosition(Movement.move(getPosition(), Movement.Direction.UP, 10f));
+            setPosition(Movement.move(getPosition(), Movement.Direction.UP, playerSpeed));
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.S)) {
-            setPosition(Movement.move(getPosition(), Movement.Direction.DOWN, 10f));
+            setPosition(Movement.move(getPosition(), Movement.Direction.DOWN, playerSpeed));
         }
 
         Window.camera.position.set(getPosition().x, getPosition().y, 0);

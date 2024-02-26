@@ -20,6 +20,7 @@ public class Populator {
 
         Random rand = new Random();
 
+
         //Current grass block height
         int currentHeight = startingHeight;
 
