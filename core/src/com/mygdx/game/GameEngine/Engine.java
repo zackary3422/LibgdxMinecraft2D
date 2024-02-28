@@ -30,6 +30,8 @@ public class Engine {
     /** Objects with defined logic to be updated */
     public static ArrayList<GameObject> objectsWithLogic;
 
+    /** */
+    public static ArrayList<GameObject> objectColliders;
 
     /** */
     public Engine(int width, int height){
@@ -38,6 +40,7 @@ public class Engine {
         objectsWithInput = new ArrayList<GameObject>();
         objectsWithLogic = new ArrayList<GameObject>();
         objectsToBeDrawn = new ArrayList<GameObject>();
+
         players = new ArrayList<Player>();
 
         window = new Window(width, height);
@@ -105,7 +108,7 @@ public class Engine {
         //Insert object into list based on priority drawing
         for(int i = 0; i < size; i++){
 
-            if(object.drawPriority <= objectsToBeDrawn.get(i).drawPriority) {
+            if(object.getDrawPriority() <= objectsToBeDrawn.get(i).getDrawPriority()) {
                 objectsToBeDrawn.add(i, object);
                 return;
             }
@@ -120,22 +123,32 @@ public class Engine {
 
     }
 
-    /** */
-    public static void changeDrawPriority(GameObject object, int newPriority){
+    /**
+     * Reinsert object with its new draw priority back into the draw list
+     * @param object the object that will be reinserted back into the objectsToBeDrawn list
+     * */
+    public static void updateDrawPriority(GameObject object) {
 
-        objectsToBeDrawn.remove(object);
-
-        object.drawPriority = newPriority;
-
-        if(object.sprite == null)
+        try {
+            //Remove object from drawing list and don't update
+            if (!objectsToBeDrawn.remove(object))
+                throw new Exception("ERROR: Can't update draw priority. Object not in the objectsToBeDrawn list");
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
             return;
+        }
+
+        //If list is empty
+        if(objectsToBeDrawn.size() == 0)
+            objectsToBeDrawn.add(object);
 
         int size = objectsToBeDrawn.size();
 
         //Insert object into list based on priority drawing
         for(int i = 0; i < size; i++){
 
-            if(object.drawPriority <= objectsToBeDrawn.get(i).drawPriority) {
+            if(object.getDrawPriority() <= objectsToBeDrawn.get(i).getDrawPriority()) {
                 objectsToBeDrawn.add(i, object);
                 return;
             }
@@ -145,17 +158,14 @@ public class Engine {
             }
         }
 
-        objectsToBeDrawn.add(object);
-
     }
-
 
     /** */
     public static void stopDrawing(GameObject object){
         objectsToBeDrawn.remove(object);
     }
 
-    /** */
+    /** Removes game object from all Engine lists to be collected by garbage collector*/
     public static void delete(GameObject object) {
         gameObjects.remove(object);
         objectsWithInput.remove(object);
@@ -167,6 +177,23 @@ public class Engine {
     public void setFocus(GameObject objectFocus){
 
     }
+
+    /**
+     * Detects all collisions and informs each of the game objects with a list of all objects colliding with it.
+     */
+    public static void updateCollisions(){
+
+
+        for(GameObject object : objectColliders){
+
+
+
+        }
+
+
+    }
+
+
 
     /** Dispose of all resources*/
     public void dispose(){

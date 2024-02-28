@@ -42,7 +42,7 @@ public class Player extends GameObject {
 
         super(position, sprite, id);
 
-        Engine.changeDrawPriority(this, 1);
+        setDrawPriority(1);
 
         enableInput();
         enableLogic();
@@ -57,7 +57,6 @@ public class Player extends GameObject {
         setPosition(position);
         setPosition(new Vector2(0,0));
         Window.camera.position.set(0, 0, 0);
-
 
     }
 

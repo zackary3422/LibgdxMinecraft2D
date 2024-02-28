@@ -55,7 +55,7 @@ public class Window {
         batch.begin();
 
         for(GameObject object : gameObjects)
-            if(object.visible /*&& /*inCameraView(object)*/) {
+            if(object.isVisible() /*&& /*inCameraView(object)*/) {
                 object.getSprite().draw(batch);
             }
 

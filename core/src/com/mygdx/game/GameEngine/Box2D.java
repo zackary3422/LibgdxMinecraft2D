@@ -54,6 +54,11 @@ public class Box2D {
         return (xOverlap || xOverlap2) && (yOverlap || yOverlap2);
     }
 
+    /** *///IMPLEMENT MORE WAY FOR CHECKING FOR COLLISIONS
+    public boolean isColliding(){
+        return false;
+    }
+
     /**
      * Checks if given box2D is colliding with the left side of this box2D
      * @param box2D the box2D to check if it's colliding with the left side of this box2D

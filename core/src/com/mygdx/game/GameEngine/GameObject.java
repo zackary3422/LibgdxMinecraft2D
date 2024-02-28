@@ -25,10 +25,10 @@ public class GameObject {
     public boolean collidable = false;
 
     /** Determines if object is drawn on screen*/
-    public boolean visible = false;
+    private boolean visible = false;
 
     /** Higher draw priority means it will be drawn in front of other sprites*/
-    public int drawPriority = 0;
+    private int drawPriority = 0;
 
     /** The box collider to detect collisions and collision resolution*/
     public Box2D box2D;
@@ -122,6 +122,11 @@ public class GameObject {
     /** */
     public void disableInput(){}
 
+    public void makeCollidable(){
+        collidable = true;
+
+    }
+
 
     /* ----- ID METHODS ----- */
 
@@ -156,6 +161,11 @@ public class GameObject {
     /** */
     public Sprite getSprite(){
         return sprite;
+    }
+
+    /** */
+    public boolean isVisible(){
+        return visible;
     }
 
     /** */
@@ -209,11 +219,16 @@ public class GameObject {
     }
 
     /** */
-    public void changePriority(int newPriority){
+    public void setDrawPriority(int newPriority){
 
-        Engine.changeDrawPriority(this, newPriority);
+        drawPriority = newPriority;
 
+        Engine.updateDrawPriority(this);
     }
 
+    /** */
+    public int getDrawPriority(){
+        return drawPriority;
+    }
 
 }
