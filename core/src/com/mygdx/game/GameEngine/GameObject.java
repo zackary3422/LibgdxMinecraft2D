@@ -16,7 +16,7 @@ public class GameObject {
     protected Dimension<Float> dimension;
 
     /** */
-    Movement movement;
+    protected Movement movement;
 
     /** The id list is used to determine the type of game object*/
     public ArrayList<ID> idList;
@@ -39,55 +39,59 @@ public class GameObject {
     /** Gravity applied to objects velocity*/
     float gravity = -20f;
 
+    /** */
+    ArrayList<GameObject> collidingObjects;
+
+
     /* ----- CONSTRUCTORS ----- */
+
+    private GameObject(){
+
+        movement = new Movement();
+        idList = new ArrayList<ID>();
+
+        Engine.add(this);
+    }
 
     /** */
     public GameObject(Vector2 position, Sprite sprite) {
 
-        movement = new Movement();
+        this();
 
-        idList = new ArrayList<ID>();
-
-        this.position = position;
+        setPosition(position);
         this.sprite = sprite;
         dimension = new Dimension<Float>(sprite.getWidth(), sprite.getHeight());
 
-        makeVisible();
 
-        Engine.add(this);
+        makeVisible();
     }
 
+    /** */
     public GameObject(Vector2 position, Sprite sprite, ID id) {
 
-        movement = new Movement();
+        this();
 
-        idList = new ArrayList<ID>();
         idList.add(id);
 
-
         this.sprite = sprite;
-        setPosition(position);
 
+        setPosition(position);
         dimension = new Dimension<Float>(sprite.getWidth(), sprite.getHeight());
 
         makeVisible();
-
-        Engine.add(this);
     }
 
+    /** */
     public GameObject(Vector2 position, Dimension<Float> dimension, ID id) {
 
-        movement = new Movement();
+        this();
 
-        idList = new ArrayList<ID>();
         idList.add(id);
 
         setPosition(position);
-
         this.dimension = dimension;
-
-        Engine.add(this);
     }
+
 
     /* ----- CHILD DEFINED CLASSES ----- */
 
@@ -122,81 +126,10 @@ public class GameObject {
     /** */
     public void disableInput(){}
 
+    /** */
     public void makeCollidable(){
         collidable = true;
 
-    }
-
-
-    /* ----- ID METHODS ----- */
-
-    /** */
-    public void addID(ID id){
-        idList.add(id);
-    }
-
-    /** */
-    public void removeID(ID id){
-        idList.remove(id);
-    }
-
-    /** */
-    public boolean hasMatchingID(ID id){
-
-        for(ID idElement : idList)
-            if(idElement.equals(id))
-                return true;
-
-        return false;
-    }
-
-
-    /* ----- ACCESSORS ----- */
-
-    /** */
-    public Vector2 getPosition(){
-        return position;
-    }
-
-    /** */
-    public Sprite getSprite(){
-        return sprite;
-    }
-
-    /** */
-    public boolean isVisible(){
-        return visible;
-    }
-
-    /** */
-    public Dimension<Float> getDimension(){
-        return dimension;
-    }
-
-    /** @return the center x-position of block*/
-    public float getCenterX(){return position.x + (dimension.width / 2);}
-
-    /** @return the center y-position of block*/
-    public float getCenterY(){return position.y + (dimension.height / 2);};
-
-    public String toString(){
-        return "toString Not Defined";
-    }
-
-    /* ----- MUTATORS ----- */
-
-    /**
-     * Sets a new position for the block and sets a new position for sprite
-     * @param newPosition new Vector2 position
-     */
-    public void setPosition(Vector2 newPosition){
-        position = newPosition;
-
-        if(box2D != null)
-            box2D.position = position;
-
-        if(sprite != null)
-            sprite.setPosition(position.x, position.y);
     }
 
     /** */
@@ -226,9 +159,87 @@ public class GameObject {
         Engine.updateDrawPriority(this);
     }
 
+
+    /* ----- ID METHODS ----- */
+
+    /** */
+    public void addID(ID id){
+        idList.add(id);
+    }
+
+    /** */
+    public void removeID(ID id){
+        idList.remove(id);
+    }
+
+    /** */
+    public boolean hasMatchingID(ID id){
+
+        for(ID idElement : idList)
+            if(idElement.equals(id))
+                return true;
+
+        return false;
+    }
+
+
+    /* ----- ACCESSORS ----- */
+
+    /** *///PASSED BY REFERENCE?
+    public Vector2 getPosition(){
+        return position;
+    }
+
+    /** */
+    public Sprite getSprite(){
+        return sprite;
+    }
+
+    /** */
+    public boolean isVisible(){
+        return visible;
+    }
+
+    /** */
+    public Dimension<Float> getDimension(){
+        return dimension;
+    }
+
+    /** @return the center x-position of block*/
+    public float getCenterX(){return position.x + (dimension.width / 2);}
+
+    /** @return the center y-position of block*/
+    public float getCenterY(){return position.y + (dimension.height / 2);};
+
+    /** */
+    public String toString(){
+        return "toString Not Defined";
+    }
+
     /** */
     public int getDrawPriority(){
         return drawPriority;
     }
+
+
+    /* ----- MUTATORS ----- */
+
+    /**
+     * Sets a new position for the block and sets a new position for sprite
+     * @param newPosition new Vector2 position
+     */
+    public void setPosition(Vector2 newPosition){
+        position = newPosition;
+
+        if(box2D != null)
+            box2D.position = position;
+
+        if(sprite != null)
+            sprite.setPosition(position.x, position.y);
+    }
+
+
+
+
 
 }

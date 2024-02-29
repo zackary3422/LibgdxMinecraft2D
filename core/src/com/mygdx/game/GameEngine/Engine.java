@@ -36,12 +36,13 @@ public class Engine {
     /** */
     public Engine(int width, int height){
 
-        gameObjects = new ArrayList<GameObject>();
-        objectsWithInput = new ArrayList<GameObject>();
-        objectsWithLogic = new ArrayList<GameObject>();
-        objectsToBeDrawn = new ArrayList<GameObject>();
+        gameObjects = new ArrayList<>();
+        objectsWithInput = new ArrayList<>();
+        objectsWithLogic = new ArrayList<>();
+        objectsToBeDrawn = new ArrayList<>();
+        objectColliders = new ArrayList<>();
 
-        players = new ArrayList<Player>();
+        players = new ArrayList<>();
 
         window = new Window(width, height);
     }
@@ -140,7 +141,7 @@ public class Engine {
         }
 
         //If list is empty
-        if(objectsToBeDrawn.size() == 0)
+        if(objectsToBeDrawn.isEmpty())
             objectsToBeDrawn.add(object);
 
         int size = objectsToBeDrawn.size();
@@ -178,15 +179,43 @@ public class Engine {
 
     }
 
+    /** */
+    public static void makeCollidable(GameObject object){
+
+        if(object == null)
+            throw new NullPointerException("Can't add null object to engine colliders list");
+
+        objectColliders.add(object);
+    }
+
     /**
      * Detects all collisions and informs each of the game objects with a list of all objects colliding with it.
      */
     public static void updateCollisions(){
 
 
-        for(GameObject object : objectColliders){
+        int size = objectColliders.size();
+
+        for(int i = 0; i < size; i++){
+
+            for(int j = i; j < size; j++){
 
 
+
+
+            }
+
+            //Fill up the colliding objects
+
+            //Send results to current object
+
+            /*
+            * So we take one objects and find all blocks colliding with it and send results to that object.
+            * Then we add that object to list of colliding objects of all the objects it was colliding with.
+            * Then we remove that object from the list because we found all colliding objects with it and notified all the objects colliding with it.
+            * Should optimize it by a lot
+            * DON'T CREATE A NEW LIST. JUST ITERATE THROUGH EACH ONE INTEAD OF DELETING. IT WILL TAKE CARE OF ITESELF
+            * */
 
         }
 

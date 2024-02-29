@@ -19,7 +19,7 @@ import java.util.ArrayList;
  */
 public class Player extends GameObject {
 
-    /** */
+    /** ID to identify that this is a player object*/
     public static ID id = new ID();
 
     /*** The list of blocks that are colliding with player*/

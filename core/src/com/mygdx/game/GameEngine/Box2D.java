@@ -85,7 +85,6 @@ public class Box2D {
         return (xOverlap || xOverlap2) && (yOverlap || yOverlap2);
     }
 
-
     /**
      * Checks if given box2D is colliding with the right side of this box2D
      * @param box2D the box2D to check if it's colliding with the right side of this box2D
@@ -111,7 +110,6 @@ public class Box2D {
 
         return (xOverlap || xOverlap2) && (yOverlap || yOverlap2);
     }
-
 
     /**
      * Checks if given box2D is colliding with the bottom side of this box2D
