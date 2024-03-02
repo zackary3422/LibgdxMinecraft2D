@@ -55,8 +55,26 @@ public class Box2D {
     }
 
     /** *///IMPLEMENT MORE WAY FOR CHECKING FOR COLLISIONS
-    public boolean isColliding(){
-        return false;
+    public static boolean isColliding(GameObject object1, GameObject object2){
+
+        //Get parameters values
+        float x1 = object1.getPosition().x;
+        float x2 = x1 + object1.getDimension().width;
+        float x3 = object2.getPosition().x;
+        float x4 = x3 + object2.getDimension().width;
+
+        float xOverlap = getOverlap(x1, x2, x3, x4);
+
+        //Get parameters values
+        float y1 = object1.getPosition().y;
+        float y2 = y1 + object1.getDimension().height;
+        float y3 = object2.getPosition().y;
+        float y4 = y3 + object2.getDimension().height;
+
+        float yOverlap = getOverlap(y1, y2, y3, y4);
+
+
+        return xOverlap != 0 && yOverlap != 0;
     }
 
     /**

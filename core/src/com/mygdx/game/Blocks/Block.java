@@ -36,7 +36,7 @@ public abstract class Block extends GameObject {
         super(position, sprite, id);
 
         addID(Block.id);
-        this.collidable = true;
+        makeCollidable();
     }
 
     /***/

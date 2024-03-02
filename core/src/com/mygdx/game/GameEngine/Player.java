@@ -47,6 +47,9 @@ public class Player extends GameObject {
         enableInput();
         enableLogic();
 
+        makeCollidable();
+        updateCollisions = true;
+
         //Set dimensions of player
         dimension = new Dimension<Float>(sprite.getWidth(), sprite.getHeight());
 
@@ -74,6 +77,9 @@ public class Player extends GameObject {
 
         //Apply velocities to move player
         setPosition(movement.move(getPosition()));
+
+
+        System.out.println(collidingObjects.size());
 
     }
 

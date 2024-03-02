@@ -61,6 +61,8 @@ public class Engine {
         //Updates all game objects logic
         logicUpdate();
 
+        updateCollisions();
+
         Time.incrementTime();
 
        // System.out.println(Gdx.graphics.getFramesPerSecond());
@@ -193,21 +195,50 @@ public class Engine {
      */
     public static void updateCollisions(){
 
+        //Clear out all colliding objects lists
+        for(GameObject object : objectColliders)
+            object.collidingObjects.clear();
 
         int size = objectColliders.size();
 
-        for(int i = 0; i < size; i++){
+        GameObject currentObject;
+        GameObject temp2;
 
-            for(int j = i; j < size; j++){
+        //Loop through all objects and update their colliding objects list
+        for(int i = 0; i < size-1; i++){
+
+            currentObject = objectColliders.get(i);
+
+            //Update current objects list
+            if(currentObject.updateCollisions)
+                for(int j = i+1; j < size; j++){
+                    temp2 = objectColliders.get(j);
+
+                    if(Box2D.isColliding(currentObject, temp2)){
+                        currentObject.collidingObjects.add(temp2);
+
+                        if(temp2.updateCollisions)
+                            temp2.collidingObjects.add(currentObject);
+                    }
+                }
+            //Only update others objects list
+            else
+                for(int j = i+1; j < size; j++){
+                    temp2 = objectColliders.get(j);
+
+                    if(temp2.updateCollisions)
+                        if(Box2D.isColliding(currentObject, temp2))
+                            temp2.collidingObjects.add(currentObject);
+
+                }
 
 
-
-
-            }
 
             //Fill up the colliding objects
 
             //Send results to current object
+
+            //Might need two lists. One for objects that are just collidable. One for the objects the have logic when colliding?
 
             /*
             * So we take one objects and find all blocks colliding with it and send results to that object.

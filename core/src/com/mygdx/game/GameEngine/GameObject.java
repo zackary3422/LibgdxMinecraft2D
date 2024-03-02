@@ -22,7 +22,7 @@ public class GameObject {
     public ArrayList<ID> idList;
 
     /** The boolean for whether this block is collidable or not*/
-    public boolean collidable = false;
+    private boolean collidable = false;
 
     /** Determines if object is drawn on screen*/
     private boolean visible = false;
@@ -42,6 +42,8 @@ public class GameObject {
     /** */
     ArrayList<GameObject> collidingObjects;
 
+    boolean updateCollisions = false;
+
 
     /* ----- CONSTRUCTORS ----- */
 
@@ -49,6 +51,7 @@ public class GameObject {
 
         movement = new Movement();
         idList = new ArrayList<ID>();
+        collidingObjects = new ArrayList<GameObject>();
 
         Engine.add(this);
     }
@@ -128,8 +131,11 @@ public class GameObject {
 
     /** */
     public void makeCollidable(){
-        collidable = true;
 
+        if(!collidable) {
+            collidable = true;
+            Engine.makeCollidable(this);
+        }
     }
 
     /** */
@@ -219,6 +225,11 @@ public class GameObject {
     /** */
     public int getDrawPriority(){
         return drawPriority;
+    }
+
+    /** */
+    public boolean isCollidable(){
+        return collidable;
     }
 
 

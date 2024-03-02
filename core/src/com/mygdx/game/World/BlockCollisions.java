@@ -112,7 +112,7 @@ public class BlockCollisions {
     public static void filter(ArrayList<Block> collidingBlocks){
 
         for (int i = 0; i < collidingBlocks.size(); i++)
-            if(!collidingBlocks.get(i).collidable)
+            if(!collidingBlocks.get(i).isCollidable())
             {
                 collidingBlocks.remove(i);
                 i--;
