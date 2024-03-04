@@ -22,9 +22,6 @@ public class Player extends GameObject {
     /** ID to identify that this is a player object*/
     public static ID id = new ID();
 
-    /*** The list of blocks that are colliding with player*/
-    public ArrayList<Block> collidingBlocks;
-
     /*** The player movement speed*/
     private float playerSpeed = 10;
 
@@ -79,7 +76,12 @@ public class Player extends GameObject {
         setPosition(movement.move(getPosition()));
 
 
-        System.out.println(collidingObjects.size());
+
+        //for(int i = 0; i < collidingObjects.size(); i++)
+         //   if(Box2D.rightCollision(this, collidingObjects.get(i)))
+              //  collidingObjects.get(i).makeInvisible();
+
+       // System.out.println(collidingObjects.size());
 
     }
 

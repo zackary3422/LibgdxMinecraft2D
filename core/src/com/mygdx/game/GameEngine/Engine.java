@@ -65,7 +65,7 @@ public class Engine {
 
         Time.incrementTime();
 
-       // System.out.println(Gdx.graphics.getFramesPerSecond());
+        System.out.println(Gdx.graphics.getFramesPerSecond());
     }
 
     /** */
@@ -199,6 +199,8 @@ public class Engine {
         for(GameObject object : objectColliders)
             object.collidingObjects.clear();
 
+        int k = 0;
+
         int size = objectColliders.size();
 
         GameObject currentObject;
@@ -219,6 +221,7 @@ public class Engine {
 
                         if(temp2.updateCollisions)
                             temp2.collidingObjects.add(currentObject);
+                        k++;
                     }
                 }
             //Only update others objects list
@@ -229,7 +232,7 @@ public class Engine {
                     if(temp2.updateCollisions)
                         if(Box2D.isColliding(currentObject, temp2))
                             temp2.collidingObjects.add(currentObject);
-
+                    k++;
                 }
 
 
@@ -249,6 +252,8 @@ public class Engine {
             * */
 
         }
+
+        System.out.println(k);
 
 
     }
