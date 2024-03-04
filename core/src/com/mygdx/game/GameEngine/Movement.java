@@ -34,9 +34,9 @@ public class Movement {
     /** */
     public static Vector2 move(Vector2 position, float angle, float velocity){
 
-        float newX = position.x + (float)(Math.cos(angle) * velocity);
+        float newX = position.x + getDeltaSpeed((float)(Math.cos(angle) * velocity));
 
-        float newY = position.y + (float)(Math.sin(angle) * velocity);
+        float newY = position.y + getDeltaSpeed((float)(Math.sin(angle) * velocity));
 
         return new Vector2(newX, newY);
     }
@@ -61,15 +61,15 @@ public class Movement {
                 break;
         }
 
-        float newX = position.x + (float)(Math.cos(angle) * velocity);
+        float newX = position.x + getDeltaSpeed((float)(Math.cos(angle) * velocity));
 
-        float newY = position.y + (float)(Math.sin(angle) * velocity);
+        float newY = position.y + getDeltaSpeed((float)(Math.sin(angle) * velocity));
 
         return new Vector2(newX, newY);
     }
 
     /** */
-    public float getDeltaSpeed(float speed){
+    public static float getDeltaSpeed(float speed){
         return speed * Gdx.graphics.getDeltaTime();
     }
 

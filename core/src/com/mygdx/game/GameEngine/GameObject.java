@@ -139,6 +139,15 @@ public class GameObject {
     }
 
     /** */
+    public void updateCollisions(){
+
+        updateCollisions = true;
+
+        Engine.addObjectCollider(this);
+
+    }
+
+    /** */
     public void makeVisible(){
 
         if(!visible && sprite != null) {
@@ -164,6 +173,7 @@ public class GameObject {
 
         Engine.updateDrawPriority(this);
     }
+
 
 
     /* ----- ID METHODS ----- */
@@ -249,7 +259,7 @@ public class GameObject {
             sprite.setPosition(position.x, position.y);
     }
 
-
+    /** */
 
 
 

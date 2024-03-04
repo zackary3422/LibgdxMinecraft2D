@@ -135,19 +135,21 @@ public class Box2D {
     /** */
     public static boolean rightCollision(GameObject rightSideObject, GameObject rightCollidingObject){
 
+        //Gets X values for game objects
         float minX1 = rightSideObject.getPosition().x;
         float maxX1 = rightSideObject.getPosition().x + rightSideObject.getDimension().width;
         float minX2 = rightCollidingObject.getPosition().x;
         float maxX2 = rightCollidingObject.getPosition().x + rightCollidingObject.getDimension().width;
 
+        //Gets Y values for game objects
         float minY1 = rightSideObject.getPosition().y;
         float maxY1 = rightSideObject.getPosition().y + rightSideObject.getDimension().height;
         float minY2 = rightCollidingObject.getPosition().y;
         float maxY2 = rightCollidingObject.getPosition().y + rightCollidingObject.getDimension().height;
 
+        //Determines overlap
         boolean yOverlap = getOverlap(minY1, maxY1, minY2, maxY2) != 0;
         boolean xOverlap = getOverlap(minX1, maxX1, minX2, maxX2) != 0 && minX1 < minX2;
-
 
         return xOverlap && yOverlap;
     }
@@ -176,6 +178,29 @@ public class Box2D {
         boolean yOverlap2 = (y + height <= position.y + dimension.height && y + height >= position.y);
 
         return (xOverlap || xOverlap2) && (yOverlap || yOverlap2);
+    }
+
+    /** */
+    public static boolean bottomCollision(GameObject collidableObject, GameObject collidingObject){
+
+        //Get collidable objects positions
+        float minX1 = collidableObject.getPosition().x;
+        float maxX1 = collidableObject.getPosition().x + collidableObject.getDimension().width;
+        float minY1 = collidableObject.getPosition().y;
+        float maxY1 = collidableObject.getPosition().y + collidableObject.getDimension().height;
+
+        //Get colliding objects positions
+        float minX2 = collidingObject.getPosition().x;
+        float maxX2 = collidingObject.getPosition().x + collidableObject.getDimension().width;
+        float minY2 = collidingObject.getPosition().y;
+        float maxY2 = collidingObject.getPosition().y + collidingObject.getDimension().height;
+
+        //Get overlap
+        boolean xOverlap = getOverlap(minX1, maxX1, minX2, maxX2) != 0;
+        boolean yOverlap = getOverlap(minY1, maxY1, minY2, maxY2) != 0 && minY1 > minY2;
+
+
+        return false;
     }
 
     /**
@@ -347,7 +372,10 @@ public class Box2D {
         return null;
     }
 
-    /** Takes in two lines and returns the amount of overlap or zero if there is no overlap*/
+    /**
+     * Takes in two lines and returns the amount of overlap or ZERO if there is no overlap
+     * The min's represent the left point of the line and the max's represent the right point
+     * */
     public static float getOverlap(float min1, float max1, float min2, float max2){
 
         return Math.max(0, Math.min(max1, max2) - Math.max(min1, min2));

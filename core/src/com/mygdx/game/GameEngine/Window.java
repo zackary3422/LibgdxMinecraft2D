@@ -1,11 +1,15 @@
 package com.mygdx.game.GameEngine;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
-
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 /**
  * The {@code Window} class handles drawing every game objects onto the screen
  *
@@ -24,6 +28,8 @@ public class Window {
     /** */
     public static int width, height;
 
+    private BitmapFont font;
+
 
     /**
      * Constructs a window class that will be used for drawing sprites and calling update methods.
@@ -36,6 +42,8 @@ public class Window {
         //Camera initialize
         camera = new OrthographicCamera(width, height);
         camera.position.set(0,0,0);
+
+        font = new BitmapFont();
 
         //Setting window dimension
         Window.width = width;
@@ -58,6 +66,8 @@ public class Window {
             if(object.isVisible() /*&& /*inCameraView(object)*/) {
                 object.getSprite().draw(batch);
             }
+
+        font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), camera.position.x - 470, camera.position.y + 350);
 
         batch.end();
 

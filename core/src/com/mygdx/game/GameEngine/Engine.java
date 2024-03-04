@@ -16,22 +16,25 @@ public class Engine {
     public static Window window;
 
     /** List of all game objects within game*/
-    public static ArrayList<GameObject> gameObjects;
+    private static ArrayList<GameObject> gameObjects;
 
     /** */
     public static ArrayList<Player> players;
 
     /** List of game objects that will be drawn to screen*/
-    public static ArrayList<GameObject> objectsToBeDrawn;
+    private static ArrayList<GameObject> objectsToBeDrawn;
 
     /** Objects with defined input*/
-    public static ArrayList<GameObject> objectsWithInput;
+    private static ArrayList<GameObject> objectsWithInput;
 
     /** Objects with defined logic to be updated */
-    public static ArrayList<GameObject> objectsWithLogic;
+    private static ArrayList<GameObject> objectsWithLogic;
 
-    /** */
-    public static ArrayList<GameObject> objectColliders;
+    /** Objects in list will have their colliding objects list updated*/
+    private static ArrayList<GameObject> objectColliders;
+
+    /** Objects in list will be able to be collided with*/
+    private static ArrayList<GameObject> objectCollidables;
 
     /** */
     public Engine(int width, int height){
@@ -41,6 +44,7 @@ public class Engine {
         objectsWithLogic = new ArrayList<>();
         objectsToBeDrawn = new ArrayList<>();
         objectColliders = new ArrayList<>();
+        objectCollidables = new ArrayList<>();
 
         players = new ArrayList<>();
 
@@ -65,7 +69,7 @@ public class Engine {
 
         Time.incrementTime();
 
-        System.out.println(Gdx.graphics.getFramesPerSecond());
+      //  System.out.println(Gdx.graphics.getFramesPerSecond());
     }
 
     /** */
@@ -187,6 +191,14 @@ public class Engine {
         if(object == null)
             throw new NullPointerException("Can't add null object to engine colliders list");
 
+        objectCollidables.add(object);
+    }
+
+    /** */
+    public static void addObjectCollider(GameObject object){
+        if(object == null)
+            System.out.println("ERROR: NULL POINTER EXCEPTION when trying to add object to update colliders list");
+
         objectColliders.add(object);
     }
 
@@ -195,65 +207,23 @@ public class Engine {
      */
     public static void updateCollisions(){
 
-        //Clear out all colliding objects lists
+        //Clear out colliding objects list
         for(GameObject object : objectColliders)
             object.collidingObjects.clear();
 
-        int k = 0;
 
-        int size = objectColliders.size();
+        //Add Spacial partitioning here
+        //Arraylist of arraylist
 
-        GameObject currentObject;
-        GameObject temp2;
+        //Adds colliding objects to object colliders, colliding lists
+        for(GameObject objectCollider : objectColliders)
 
-        //Loop through all objects and update their colliding objects list
-        for(int i = 0; i < size-1; i++){
-
-            currentObject = objectColliders.get(i);
-
-            //Update current objects list
-            if(currentObject.updateCollisions)
-                for(int j = i+1; j < size; j++){
-                    temp2 = objectColliders.get(j);
-
-                    if(Box2D.isColliding(currentObject, temp2)){
-                        currentObject.collidingObjects.add(temp2);
-
-                        if(temp2.updateCollisions)
-                            temp2.collidingObjects.add(currentObject);
-                        k++;
-                    }
-                }
-            //Only update others objects list
-            else
-                for(int j = i+1; j < size; j++){
-                    temp2 = objectColliders.get(j);
-
-                    if(temp2.updateCollisions)
-                        if(Box2D.isColliding(currentObject, temp2))
-                            temp2.collidingObjects.add(currentObject);
-                    k++;
-                }
+            for(GameObject collidableObject : objectCollidables) {
+                if (Box2D.isColliding(objectCollider, collidableObject) && objectCollider != collidableObject)
+                    objectCollider.collidingObjects.add(collidableObject);
+            }
 
 
-
-            //Fill up the colliding objects
-
-            //Send results to current object
-
-            //Might need two lists. One for objects that are just collidable. One for the objects the have logic when colliding?
-
-            /*
-            * So we take one objects and find all blocks colliding with it and send results to that object.
-            * Then we add that object to list of colliding objects of all the objects it was colliding with.
-            * Then we remove that object from the list because we found all colliding objects with it and notified all the objects colliding with it.
-            * Should optimize it by a lot
-            * DON'T CREATE A NEW LIST. JUST ITERATE THROUGH EACH ONE INTEAD OF DELETING. IT WILL TAKE CARE OF ITESELF
-            * */
-
-        }
-
-        System.out.println(k);
 
 
     }

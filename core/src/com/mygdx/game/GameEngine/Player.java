@@ -2,6 +2,7 @@ package com.mygdx.game.GameEngine;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.MathUtils;
 import com.mygdx.game.GameEngine.*;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -23,7 +24,7 @@ public class Player extends GameObject {
     public static ID id = new ID();
 
     /*** The player movement speed*/
-    private float playerSpeed = 10;
+    private float playerSpeed = 700;
 
     /*** The speed multiplier when sprintin */
     private float shiftMultiplier = 1.9f;
@@ -45,6 +46,7 @@ public class Player extends GameObject {
         enableLogic();
 
         makeCollidable();
+        updateCollisions();
         updateCollisions = true;
 
         //Set dimensions of player
@@ -107,6 +109,11 @@ public class Player extends GameObject {
         if(Gdx.input.isKeyPressed(Input.Keys.S)) {
             setPosition(Movement.move(getPosition(), Movement.Direction.DOWN, playerSpeed));
         }
+
+        // Update the camera position smoothly
+        //float cameraX = MathUtils.lerp(Window.camera.position.x, getPosition().x, 0.1f);
+        //float cameraY = MathUtils.lerp(Window.camera.position.y, getPosition().y, 0.1f);
+        //Window.camera.position.set(cameraX, cameraY, 0);
 
         Window.camera.position.set(getPosition().x, getPosition().y, 0);
     }
