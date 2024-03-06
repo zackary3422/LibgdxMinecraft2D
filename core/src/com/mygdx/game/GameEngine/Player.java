@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Blocks.Block;
-import com.mygdx.game.World.BlockCollisions;
 import com.mygdx.game.World.World;
 
 import java.util.ArrayList;
@@ -52,9 +51,6 @@ public class Player extends GameObject {
         //Set dimensions of player
         dimension = new Dimension<Float>(sprite.getWidth(), sprite.getHeight());
 
-        //Init box collider of player
-        box2D = new Box2D(position, dimension);
-
         //Set player position
         setPosition(position);
         setPosition(new Vector2(0,0));
@@ -78,12 +74,14 @@ public class Player extends GameObject {
         setPosition(movement.move(getPosition()));
 
 
+        for(int i = 0; i < collidingObjects.size(); i++)
+            if(!Box2D.topCollision(this, collidingObjects.get(i))){
+                collidingObjects.remove(i);
+                i--;
+            }
 
-        //for(int i = 0; i < collidingObjects.size(); i++)
-         //   if(Box2D.rightCollision(this, collidingObjects.get(i)))
-              //  collidingObjects.get(i).makeInvisible();
 
-       // System.out.println(collidingObjects.size());
+        System.out.println(collidingObjects.size());
 
     }
 
@@ -147,11 +145,7 @@ public class Player extends GameObject {
      */
     public void updateCollidingBlocks() {
 
-        //Get list of blocks colliding with player
-       // collidingBlocks = BlockCollisions.getCollidingBlocks(box2D);
 
-        //Filter out un-collidable blocks
-        //BlockCollisions.filter(collidingBlocks);
     }
 
     public String toString(){

@@ -62,11 +62,13 @@ public class Window {
 
         batch.begin();
 
+        //Draw all objects in list to screen
         for(GameObject object : gameObjects)
             if(object.isVisible() /*&& /*inCameraView(object)*/) {
                 object.getSprite().draw(batch);
             }
 
+        //Draw FPS counter
         font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), camera.position.x - 470, camera.position.y + 350);
 
         batch.end();

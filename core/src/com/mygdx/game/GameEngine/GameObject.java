@@ -30,9 +30,6 @@ public class GameObject {
     /** Higher draw priority means it will be drawn in front of other sprites*/
     private int drawPriority = 0;
 
-    /** The box collider to detect collisions and collision resolution*/
-    public Box2D box2D;
-
     /** The sprite to be drawn*/
     protected Sprite sprite;
 
@@ -251,9 +248,6 @@ public class GameObject {
      */
     public void setPosition(Vector2 newPosition){
         position = newPosition;
-
-        if(box2D != null)
-            box2D.position = position;
 
         if(sprite != null)
             sprite.setPosition(position.x, position.y);

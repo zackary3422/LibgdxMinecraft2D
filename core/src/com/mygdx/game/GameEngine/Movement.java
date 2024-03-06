@@ -8,7 +8,7 @@ public class Movement {
     /** */
     public enum Direction {LEFT, RIGHT, UP, DOWN}
 
-    /** */
+    /** */ //<-------------------- DELETE THIS OR REFACTOR IT OR SOMETHING
     public float horizontalVelocity;
 
     /** */

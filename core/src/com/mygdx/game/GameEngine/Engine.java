@@ -2,7 +2,6 @@ package com.mygdx.game.GameEngine;
 
 import com.badlogic.gdx.Gdx;
 import com.mygdx.game.Blocks.DirtBlock;
-
 import java.util.ArrayList;
 
 
@@ -69,7 +68,6 @@ public class Engine {
 
         Time.incrementTime();
 
-      //  System.out.println(Gdx.graphics.getFramesPerSecond());
     }
 
     /** */
