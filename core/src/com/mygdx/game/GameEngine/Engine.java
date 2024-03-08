@@ -20,7 +20,7 @@ public class Engine {
     /** */
     public static ArrayList<Player> players;
 
-    /** List of game objects that will be drawn to screen*/
+    /** Sorted list of game objects that will be drawn to screen based on their draw priority*/
     private static ArrayList<GameObject> objectsToBeDrawn;
 
     /** Objects with defined input*/
@@ -110,22 +110,26 @@ public class Engine {
 
         int size = objectsToBeDrawn.size();
 
-        //Insert object into list based on priority drawing
-        for(int i = 0; i < size; i++){
 
-            if(object.getDrawPriority() <= objectsToBeDrawn.get(i).getDrawPriority()) {
+        int left = 0;
+        int right = objectsToBeDrawn.size() - 1;
+        int mid = size / 2;
+        int drawPriority = object.getDrawPriority();
+
+
+        //REPLACE BINARY INSERTION HERE
+
+
+        for(int i = 0; i < size; i++) {
+
+            if (drawPriority <= objectsToBeDrawn.get(i).getDrawPriority()) {
                 objectsToBeDrawn.add(i, object);
-                return;
-            }
-            else if(i == size-1){
-                objectsToBeDrawn.add(object);
                 return;
             }
         }
 
+
         objectsToBeDrawn.add(object);
-
-
     }
 
     /**
@@ -148,21 +152,21 @@ public class Engine {
         if(objectsToBeDrawn.isEmpty())
             objectsToBeDrawn.add(object);
 
-        int size = objectsToBeDrawn.size();
+        int left = 0;
+        int right = objectsToBeDrawn.size() - 1;
+        int drawPriority = object.getDrawPriority();
 
-        //Insert object into list based on priority drawing
-        for(int i = 0; i < size; i++){
-
-            if(object.getDrawPriority() <= objectsToBeDrawn.get(i).getDrawPriority()) {
-                objectsToBeDrawn.add(i, object);
-                return;
-            }
-            else if(i == size-1){
-                objectsToBeDrawn.add(object);
-                return;
+        //Binary insertion
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            if (objectsToBeDrawn.get(mid).getDrawPriority() < drawPriority) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
             }
         }
 
+        objectsToBeDrawn.add(left, object);
     }
 
     /** */

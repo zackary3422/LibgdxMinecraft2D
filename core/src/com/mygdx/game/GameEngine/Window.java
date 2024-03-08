@@ -52,7 +52,6 @@ public class Window {
         viewPort = new Dimension<Float>(camera.viewportWidth, camera.viewportHeight);
 
         batch = new SpriteBatch();
-
     }
 
     /**
@@ -75,6 +74,7 @@ public class Window {
 
         batch.setProjectionMatrix(camera.combined);
         camera.update();
+
     }
 
     /**

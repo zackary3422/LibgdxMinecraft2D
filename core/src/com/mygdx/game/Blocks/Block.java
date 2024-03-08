@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.GameEngine.*;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 
 /**
@@ -24,6 +25,8 @@ public abstract class Block extends GameObject {
     /** The general ID for a block*/
     public static ID id = new ID();
 
+    static int test = 0;
+
 
     /**
      * Constructs a new block and initializes the variables.
@@ -34,6 +37,8 @@ public abstract class Block extends GameObject {
     public Block(Vector2 position, Sprite sprite, ID id){
 
         super(position, sprite, id);
+
+        Random random = new Random();
 
         addID(Block.id);
         makeCollidable();

@@ -74,14 +74,6 @@ public class Player extends GameObject {
         setPosition(movement.move(getPosition()));
 
 
-        for(int i = 0; i < collidingObjects.size(); i++)
-            if(!Box2D.topCollision(this, collidingObjects.get(i))){
-                collidingObjects.remove(i);
-                i--;
-            }
-
-
-        System.out.println(collidingObjects.size());
 
     }
 
