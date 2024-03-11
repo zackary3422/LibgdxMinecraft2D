@@ -36,50 +36,11 @@ public class TerrainGenerator {
     public static final int minBiomeChunkSize = 6;
 
 
-    /**
-     * Creates a new world
-     * @return the arraylist of chunks of the new world
-     */
-    public static ArrayList<Chunk> newWorld(){
 
-        ArrayList<Chunk> chunks = new ArrayList<Chunk>();
 
-        chunks.add(new ForestChunk(0, GRASS_LEVEL[0]));
-
-        //Generate right side of world
-        for(int i = 0; i < 6; i++){
-            addChunk(chunks, new ForestChunk(i + 1, chunks.get(chunks.size()-1).getRightTopBlock()), Movement.Direction.RIGHT);
-        }
-
-        //Generate left side of world
-        for(int i = 0; i < 6; i++){
-           // addChunk(chunks, generateForestChunk(chunks.get(0).getLeftTopBlock()), Movement.Direction.LEFT);
-        }
-
-        //Return new
-        return chunks;
-    }
 
 
     /* ----- Chunk Creator and Modifiers ----- */
-
-
-    public static void chunkExpander(ArrayList<Chunk> chunks, Movement.Direction direction){
-
-
-
-    }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -262,37 +223,6 @@ public class TerrainGenerator {
 
     /* ----- Biome Chunk Generator----- */
 
-    /**
-     * Creates a chunk of biome forest type.
-     * @param sideTopLayer the top layer of the chunk next to where this chunk is being placed.
-     * @return the generated forest chunk
-     */
-    /*
-    public static Chunk generateForestChunk(int sideTopLayer){
-
-        //The new world in a 2D arraylist
-        ArrayList<ArrayList<Block>> blocks = new ArrayList<ArrayList<Block>>();
-
-        //Create world full of empty blocks
-        for(int i = 0; i < World.CHUNK_SIZE.height; i++)
-        {
-            //adds new row
-            blocks.add(new ArrayList<Block>());
-
-            for (int j = 0; j < World.CHUNK_SIZE.width; j++)
-                blocks.get(i).add(null);
-        }
-
-        //Populate world with blocks
-        populateForestGrass(blocks, sideTopLayer);
-        populateDirt(blocks);
-        populateStone(blocks);
-
-
-        return new Chunk(blocks, Biome.BiomeTypes.FOREST);
-    }
-
-     */
 
 
 
@@ -347,29 +277,6 @@ public class TerrainGenerator {
 
     }
 
-    /*
-    /**
-     * Adds dirt underneath all grass blocks.
-     * @param blocks the 2D list of block to add dirt blocks to.
-     */
-    /*
-    private static void populateDirt(ArrayList<ArrayList<Block>> blocks){
-
-        //Add
-        for(int i = 0; i < blocks.size(); i++)
-            for (int j = 0; j < blocks.get(0).size(); j++){
-               if(i > blocks.size()-4)
-                    break;
-
-               if(blocks.get(i+1).get(j) != null && blocks.get(i+1).get(j).hasMatchingID(GrassBlock.id))//NULL EXCEPTION HERE
-                   for(int z = 0; z < DIRT_LAYERS; z++) {
-                       blocks.get(i - z).set(j, new DirtBlock(new Vector2(j * Block.BLOCK_LENGTH, (i - z) * Block.BLOCK_LENGTH)));
-                   }
-
-            }
-
-    }
-    */
 
     /**
      * Adds stone underneath all dirt blocks all the way down to bottom of the blocks list.

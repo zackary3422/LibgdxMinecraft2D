@@ -10,30 +10,39 @@ public class Box2D {
     /* ----- COLLISION DETECTION ----- */
 
 
-    /** *///IMPLEMENT MORE WAY FOR CHECKING FOR COLLISIONS
-    public static boolean isColliding(GameObject object1, GameObject object2){
+    /**
+     * Finds overlap between two objects and returns if the objects are colliding
+     * @param collidingObject the first object
+     * @param collidableObject the second object
+     * @return if the two objects are colliding
+     * */
+    public static boolean isColliding(GameObject collidableObject, GameObject collidingObject){
 
-        //Get parameters values
-        float x1 = object1.getPosition().x;
-        float x2 = x1 + object1.getDimension().width;
-        float x3 = object2.getPosition().x;
-        float x4 = x3 + object2.getDimension().width;
+        //Get collidable objects parameters
+        float leftX1 = collidableObject.getPosition().x;
+        float rightX1 = collidableObject.getPosition().x + collidableObject.getDimension().width;
+        float bottomY1 = collidableObject.getPosition().y;
+        float topY1 = collidableObject.getPosition().y + collidableObject.getDimension().height;
 
-        boolean xOverlap = getOverlap(x1, x2, x3, x4) != 0;
+        //Get colliding objects parameters
+        float leftX2 = collidingObject.getPosition().x;
+        float rightX2 = collidingObject.getPosition().x + collidingObject.getDimension().width;
+        float bottomY2 = collidingObject.getPosition().y;
+        float topY2 = collidingObject.getPosition().y + collidingObject.getDimension().height;
 
-        //Get parameters values
-        float y1 = object1.getPosition().y;
-        float y2 = y1 + object1.getDimension().height;
-        float y3 = object2.getPosition().y;
-        float y4 = y3 + object2.getDimension().height;
+        //Get overlap
+        boolean yOverlap = isOverlapping(bottomY1, topY1, bottomY2, topY2);
+        boolean xOverlap = isOverlapping(leftX1, rightX1, leftX2, rightX2);
 
-        boolean yOverlap = getOverlap(y1, y2, y3, y4) != 0;
-
-
-        return xOverlap && yOverlap ;
+        return xOverlap && yOverlap;
     }
 
-    /** */
+    /**
+     * Determines if the colliding object is colliding with the right side of the collidable objects
+     * @param collidableObject the object to determine if there's a collision on its right side
+     * @param collidingObject the object to determine if it's colliding with the other objects right side
+     * @return whether the colliding object is colliding on the right side of the collidable object
+     * */
     public static boolean rightCollision(GameObject collidableObject, GameObject collidingObject){
 
         //Get collidable objects coordinates
@@ -55,6 +64,12 @@ public class Box2D {
         return xOverlap && yOverlap;
     }
 
+    /**
+     * Determines if the colliding object is colliding with the left side of the collidable objects
+     * @param collidableObject the object to determine if there's a collision on its left side
+     * @param collidingObject the object to determine if it's colliding with the other objects left side
+     * @return whether the colliding object is colliding on the left side of the collidable object
+     * */
     public static boolean leftCollision(GameObject collidableObject, GameObject collidingObject){
 
         //Get collidable objects coordinates
@@ -76,7 +91,12 @@ public class Box2D {
         return xOverlap && yOverlap;
     }
 
-    /** */
+    /**
+     * Determines if the colliding object is colliding with the bottom side of the collidable objects
+     * @param collidableObject the object to determine if there's a collision on its bottom side
+     * @param collidingObject the object to determine if it's colliding with the other objects bottom side
+     * @return whether the colliding object is colliding on the bottom side of the collidable object
+     * */
     public static boolean bottomCollision(GameObject collidableObject, GameObject collidingObject){
 
         //Get collidable objects coordinates
@@ -98,7 +118,12 @@ public class Box2D {
         return xOverlap && yOverlap;
     }
 
-    /** */
+    /**
+     * Determines if the colliding object is colliding with the top side of the collidable objects
+     * @param collidableObject the object to determine if there's a collision on its top side
+     * @param collidingObject the object to determine if it's colliding with the other objects top side
+     * @return whether the colliding object is colliding on the top side of the collidable object
+     * */
     public static boolean topCollision(GameObject collidableObject, GameObject collidingObject){
 
         //Get collidable objects coordinates
@@ -127,7 +152,7 @@ public class Box2D {
     /**
      *
      */
-    public Vector2 getCollisionFreePos(GameObject collidableObject, GameObject collidingObject){
+    public static Vector2 getCollisionFreePos(GameObject collidableObject, GameObject collidingObject){
 
         //If objects aren't colliding then return same position
         if(!isColliding(collidableObject, collidingObject))
@@ -151,10 +176,10 @@ public class Box2D {
 
     /**
      * Calculate the shortest distance to move box's out of each other using the SAT method to separate block based on the shortest axis it would take
-     * to move a colliding object out of another object.
+     * to move an object out of another object.
      * @param collidableObject
      * @param collidingObject
-     * @return
+     * @return the shortest distance required to push the collidable object out of the colliding object based on its axis
      */
     public static float axisPushDistance(GameObject collidableObject, GameObject collidingObject) {
 
@@ -163,6 +188,7 @@ public class Box2D {
         float rightX1 = collidableObject.getPosition().x + collidableObject.getDimension().width;
         float leftX2 = collidingObject.getPosition().x;
         float rightX2 = collidingObject.getPosition().x + collidingObject.getDimension().width;
+
         float xOverlap = getOverlap(leftX1, rightX1, leftX2, rightX2);
 
         //Calculate Y Overlap
@@ -170,6 +196,7 @@ public class Box2D {
         float topY1 = collidableObject.getPosition().y + collidableObject.getDimension().height;
         float bottomY2 = collidingObject.getPosition().y;
         float topY2 = collidingObject.getPosition().y + collidingObject.getDimension().height;
+
         float yOverlap = getOverlap(bottomY1, topY1, bottomY2, topY2);
 
 
@@ -197,17 +224,19 @@ public class Box2D {
     }
 
     /**
-     * Find the direction for the shortest distance ot move out of.
-     * @param
-     * @return the direction of the minimum distance
+     * Find the direction for the shortest distance to move the collidable object out of the colliding object.
+     * @param collidableObject
+     * @param collidingObject
+     * @return the direction of the minimum distance to move the objects out of each other
      */
-    public Movement.Direction axisPushDirection(GameObject collidableObject, GameObject collidingObject) {
+    public static Movement.Direction axisPushDirection(GameObject collidableObject, GameObject collidingObject) {
 
         //Calculate X Overlap
         float leftX1 = collidableObject.getPosition().x;
         float rightX1 = collidableObject.getPosition().x + collidableObject.getDimension().width;
         float leftX2 = collidingObject.getPosition().x;
         float rightX2 = collidingObject.getPosition().x + collidingObject.getDimension().width;
+
         float xOverlap = getOverlap(leftX1, rightX1, leftX2, rightX2);
 
         //Calculate Y Overlap
@@ -215,6 +244,7 @@ public class Box2D {
         float topY1 = collidableObject.getPosition().y + collidableObject.getDimension().height;
         float bottomY2 = collidingObject.getPosition().y;
         float topY2 = collidingObject.getPosition().y + collidingObject.getDimension().height;
+
         float yOverlap = getOverlap(bottomY1, topY1, bottomY2, topY2);
 
 

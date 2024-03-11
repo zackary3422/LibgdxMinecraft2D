@@ -53,8 +53,8 @@ public class Player extends GameObject {
 
         //Set player position
         setPosition(position);
-        setPosition(new Vector2(0,0));
-        Window.camera.position.set(0, 0, 0);
+        setPosition(new Vector2(0,1500));
+        Window.camera.position.set(0, 1500, 0);
 
     }
 
@@ -73,7 +73,8 @@ public class Player extends GameObject {
         //Apply velocities to move player
         setPosition(movement.move(getPosition()));
 
-
+      //  for(GameObject object : collidingObjects)
+     //      setPosition(Box2D.getCollisionFreePos(this, object));
 
     }
 

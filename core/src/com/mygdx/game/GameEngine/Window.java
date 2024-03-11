@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.game.Blocks.Block;
+
 /**
  * The {@code Window} class handles drawing every game objects onto the screen
  *
@@ -55,51 +57,51 @@ public class Window {
     }
 
     /**
-     * Draws all game objects onto the screen
+     * Draws all-game objects onto the screen
      */
     public void draw(ArrayList<GameObject> gameObjects){
 
         batch.begin();
 
-        //Draw all objects in list to screen
+        //Draw all objects in the list to screen
         for(GameObject object : gameObjects)
-            if(object.isVisible() /*&& /*inCameraView(object)*/) {
+            if(object.isVisible() && inView(object))
                 object.getSprite().draw(batch);
-            }
+
 
         //Draw FPS counter
         font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), camera.position.x - 470, camera.position.y + 350);
 
         batch.end();
 
+        //Update camera
         batch.setProjectionMatrix(camera.combined);
         camera.update();
-
     }
 
     /**
-     *
+     * Takes in a object and returns whether that object is within the cameras view.
      */
-    public boolean inCameraView(GameObject object){
+    public static boolean inView(GameObject object){
 
-        Vector2 cameraPosition = new Vector2(camera.position.x, camera.position.y);
+        //Get objects coordinates
+        float objectLeftX = object.getPosition().x;
+        float objectRightX = object.getPosition().x + object.getDimension().width;
+        float objectBottomY = object.getPosition().y;
+        float objectTopY = object.getPosition().y + object.getDimension().height;
 
-        //Get objects position and dimension
-        Vector2 position = object.getPosition();
-        Dimension<Float> dimension = object.getDimension();
+        //Small offset to some objects out of view, so they are already loaded for when the player moves
+        float offset = 45;
 
-        //Get parameters values with a offset value
-        float width2 = viewPort.width + 20;
-        float height2 = viewPort.height + 50;
-        float x2 = cameraPosition.x - width2 / 2;
-        float y2 = cameraPosition.y - height2 / 2;
+        //Get cameras coordinates
+        float cameraLeftX = camera.position.x - (camera.viewportWidth / 2) - offset;
+        float cameraRightX = camera.position.x + (camera.viewportWidth / 2) + offset;
+        float cameraBottomY = camera.position.y - (camera.viewportHeight / 2) - offset;
+        float cameraTopY = camera.position.y + (camera.viewportHeight / 2) + offset;
 
-
-        //Find which parts of block is the player seeing
-        boolean xOverlap = (position.x <= x2 + width2 && position.x >= x2) ||
-                (position.x + dimension.width <= x2 + width2 && position.x + dimension.width >= x2);
-        boolean yOverlap = (position.y <= y2 + height2 && position.y >= y2) ||
-                (position.y + dimension.height <= y2 + height2 && position.y + dimension.height >= y2);
+        //Find which parts of the object is the player seeing
+        boolean xOverlap = Box2D.isOverlapping(objectLeftX, objectRightX, cameraLeftX, cameraRightX);
+        boolean yOverlap = Box2D.isOverlapping(objectBottomY, objectTopY, cameraBottomY, cameraTopY);
 
         return xOverlap && yOverlap;
     }

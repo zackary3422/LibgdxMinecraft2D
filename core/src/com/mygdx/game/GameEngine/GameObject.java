@@ -39,6 +39,7 @@ public class GameObject {
     /** */
     ArrayList<GameObject> collidingObjects;
 
+    /** Determines if the colliding objects list gets updated*/
     boolean updateCollisions = false;
 
 

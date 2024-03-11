@@ -64,10 +64,11 @@ public class Engine {
         //Updates all game objects logic
         logicUpdate();
 
+        //Updates game objects colliding list
         updateCollisions();
 
+        //Update time
         Time.incrementTime();
-
     }
 
     /** */
@@ -108,28 +109,9 @@ public class Engine {
         if(object.sprite == null)
             return;
 
-        int size = objectsToBeDrawn.size();
-
-
-        int left = 0;
-        int right = objectsToBeDrawn.size() - 1;
-        int mid = size / 2;
-        int drawPriority = object.getDrawPriority();
-
-
-        //REPLACE BINARY INSERTION HERE
-
-
-        for(int i = 0; i < size; i++) {
-
-            if (drawPriority <= objectsToBeDrawn.get(i).getDrawPriority()) {
-                objectsToBeDrawn.add(i, object);
-                return;
-            }
-        }
-
-
         objectsToBeDrawn.add(object);
+        updateDrawPriority(object);
+
     }
 
     /**
@@ -220,18 +202,14 @@ public class Engine {
         //Adds colliding objects to object colliders, colliding lists
         for(GameObject objectCollider : objectColliders)
 
-            for(GameObject collidableObject : objectCollidables) {
+            for(GameObject collidableObject : objectCollidables)
                 if (Box2D.isColliding(objectCollider, collidableObject) && objectCollider != collidableObject)
                     objectCollider.collidingObjects.add(collidableObject);
-            }
-
-
 
 
     }
 
-
-
+    /** */
     /** Dispose of all resources*/
     public void dispose(){
         window.batch.dispose();
