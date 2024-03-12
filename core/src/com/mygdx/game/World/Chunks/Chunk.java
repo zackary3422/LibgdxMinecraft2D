@@ -37,6 +37,9 @@ public abstract class Chunk {
 
     }
 
+    /** */
+    public abstract void generateChunk(int sideHeight);
+
     /**
      * Populates the chunks blocks with NULL
      */
@@ -152,6 +155,8 @@ public abstract class Chunk {
         return xPosition;
     }
 
+
+
     /* ----- MUTATORS ----- */
 
     /** */
@@ -186,6 +191,18 @@ public abstract class Chunk {
         return new Vector2(x * Block.BLOCK_LENGTH, y * Block.BLOCK_LENGTH);
     }
 
+    public void makeInvisible() {
 
+        for (Block[] blockArray : blocks)
+            for (Block block : blockArray)
+                block.makeInvisible();
+    }
+
+    public void makeVisible(){
+
+        for(Block[] blockArray : blocks)
+            for(Block block : blockArray)
+                block.makeVisible();
+    }
 
 }

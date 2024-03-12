@@ -14,30 +14,19 @@ public abstract class Biome {
 
     //SPAWN RATE PROPERTIES
 
-    public int topLayer;
 
-    /** The minimum number of chunks a biome needs before switching to a new one*/
+    /** The minimum number of chunks a biomes needs before switching to a new one*/
     public static final int minBiomeChunkSize = 6;
 
-
-
-
     //MAYBE USE A PARALLEL ARRAY FOR ITEMS AND SPAWN RATES
-
-
-    //TERRAIN PROPERTIES
 
 
     public float biomeSpawnChance;
 
 
-    public BiomeTypes getRandomBiome(){
-        return null;
-    }
-
     /**
-     * Generates a random biome and return it.
-     * @return the random biome
+     * Generates a random biomes and return it.
+     * @return the random biomes
      */
     public static Biome.BiomeTypes randomBiome(){
 
@@ -48,26 +37,25 @@ public abstract class Biome {
         return Biome.BiomeTypes.FOREST;
     }
 
-
     /**
-     * Generates a biome type based on previous biome type in chunks list.
-     * @param chunks the list of chunks used to see previous biome types
-     * @param direction the direction of where the biome should be placed
+     * Generates a biome type based on a previous biomes type in chunks list.
+     * @param chunks the list of chunks used to see previous biomes types
+     * @param direction the direction of where the biomes should be placed
      */
     public static Biome.BiomeTypes generateBiome(ArrayList<Chunk> chunks, Movement.Direction direction){
 
         int currentBiomeSize = 0;
 
-        //Determine the previous biome
+        //Determine the previous biomes
         Biome.BiomeTypes currentBiome = direction == Movement.Direction.LEFT ? chunks.get(0).getBiome() : chunks.get(chunks.size()-1).getBiome();
 
-        //Get current biome size
+        //Get current biomes size
         for(int i = chunks.size()-1; i >= 0; i--)
             if(chunks.get(i).getBiome() == currentBiome)
                 currentBiomeSize++;
 
 
-        //Generate new biome if minimum biome chunk size has been met or return previous biome if not
+        //Generate new biomes if the minimum biome chunk size has been met or return previous biome if not
         if(currentBiomeSize > minBiomeChunkSize)
             return randomBiome();
         else

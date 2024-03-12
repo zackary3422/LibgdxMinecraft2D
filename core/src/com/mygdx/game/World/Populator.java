@@ -13,13 +13,15 @@ import java.util.Random;
 public class Populator {
 
 
+    //MAYBE instead of under block ID and other vars just require an array of ints on where to put each block and generate that
+    //Array in chunk class
+
     /**
      *
      */
     public static void populateGrass(Block[][] blocks, int heightRange, int startingHeight, Range layerLengthRange){
 
         Random rand = new Random();
-
 
         //Current grass block height
         int currentHeight = startingHeight;
@@ -75,14 +77,9 @@ public class Populator {
 
     }
 
-    /** */
-    public static void populateDirt(Block[][] blocks, Range rangeOfLayerDepth){
-
-
-
-    }
-
-    /** */
+    /**
+     *
+     * */
     public static void populateStone(Block[][] blocks, ID underBlockID){
 
         for(int i = blocks.length - 2; i >= 0; i--){
@@ -97,8 +94,10 @@ public class Populator {
 
     }
 
+    /** */
+    public static void generateCaves(Block[][] blocks){
 
-
+    }
 
 
 

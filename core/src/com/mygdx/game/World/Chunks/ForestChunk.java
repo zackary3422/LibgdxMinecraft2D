@@ -11,6 +11,8 @@ import com.mygdx.game.GameEngine.Range;
 import com.mygdx.game.World.Biome;
 import com.mygdx.game.World.Populator;
 
+import java.util.Random;
+
 public class ForestChunk extends Chunk{
 
 
@@ -41,6 +43,44 @@ public class ForestChunk extends Chunk{
 
         //Populate Stone
         Populator.populateStone(blocks, DirtBlock.id);
+
+    }
+
+    /***/
+    public static int[] generateGrassHeights(int startingHeight, int layerLengthRange){
+
+        Random rand = new Random();
+
+        int[] grassHeights;
+
+        //Current grass block height
+        int currentHeight = startingHeight;
+
+        //Length of that grass block height
+        int layerLength = rand.nextInt(layerLengthRange.max - layerLengthRange.min) + layerLengthRange.min;
+
+
+        for(int i = 0; i < Chunk.blocksDimension.width; i++){
+
+            //Set new grass block
+            blocks[currentHeight][i] = new GrassBlock(new Vector2(i * Block.BLOCK_LENGTH, currentHeight * Block.BLOCK_LENGTH));
+
+            layerLength--;
+
+            //Set new layer length and height
+            if(layerLength <= 0){
+                layerLength = rand.nextInt(layerLengthRange.max - layerLengthRange.min) + layerLengthRange.min;
+
+                //RAND FOR UP 1 or down 1 block within height range
+                if(currentHeight >= heightRange + startingHeight)
+                    currentHeight--;
+                else if(currentHeight <= startingHeight - heightRange)
+                    currentHeight++;
+                else
+                    currentHeight += rand.nextInt(3) - 1;
+
+            }
+        }
 
     }
 

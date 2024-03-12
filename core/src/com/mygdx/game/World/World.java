@@ -1,11 +1,13 @@
 package com.mygdx.game.World;
 
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Blocks.Block;
 import com.mygdx.game.GameEngine.Movement;
 import com.mygdx.game.GameEngine.Player;
 import com.mygdx.game.World.Chunks.Chunk;
+import com.mygdx.game.GameEngine.Window;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -34,18 +36,8 @@ public class World{
         ChunkGenerator.createStartingChunk(chunks);
     }
 
-    /**
-     * Called every frame to update world blocks. Used to expand world as player explores.
-     *
-     * @param player used to pass onto methods like expandWorld
-     */
-    public void update(Player player){
 
-        worldExpansion(player);
-
-
-    }
-
+    /** */
     public void worldExpansion(Player player){
 
         //Find which side needs to be expanded if necessary
@@ -61,10 +53,10 @@ public class World{
     }
 
     /**
-     * Sets all chunks not within range to be invisible if not all ready
+     * Sets all chunks not within range of the camera to be invisible
      *
      */
-    public void chunkDrawer(){
+    public static void makeChunksInvisible(){
 
 
 
@@ -72,7 +64,7 @@ public class World{
 
     /**
      *  Finds a spawn point for the player on top of a top layer block and
-     *  returns the coordinates. Has error handling for out of bounds index.
+     *  returns the coordinates our prints out an error based on exception sets spawn point to (0,0)
      *
      * @return a vector2 with x and y coordinate
      */
@@ -81,10 +73,13 @@ public class World{
             return chunks.get(0).getSpawnPoint();
         }
         catch(IndexOutOfBoundsException e){
-            System.out.println("ERROR: Chunks index out of bounds for spawn point");
+            System.out.println("ERROR: (World) Chunks index out of bounds for spawn point");
+        }
+        catch(NullPointerException e){
+            System.out.println("ERROR: (World) Null Pointer - Chunks haven't been created for spawn point");
         }
         catch(Exception e){
-            System.out.println("ERROR: error in spawn point");
+            System.out.println("ERROR: (World) Exception for spawn point");
         }
 
         return new Vector2(0,0);
