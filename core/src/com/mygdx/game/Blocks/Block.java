@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.GameEngine.*;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 
 /**
@@ -18,14 +17,12 @@ public abstract class Block extends GameObject {
 
 
     /** This is the length of a block on all sides. All block assets have same lengths so this just uses the dirt block to get the length*/
-    public static final float BLOCK_LENGTH = new Sprite(new Texture("DirtBlock.jpg")).getWidth();
+    public static final float LENGTH = new Sprite(new Texture("DirtBlock.jpg")).getWidth();
 
     //MAYBE ENFORCE BLOCKS POSITION BY FORCING POSITION TO JUST BE TWO INTS OF X AND Y
 
     /** The general ID for a block*/
     public static ID id = new ID();
-
-    static int test = 0;
 
 
     /**
@@ -37,8 +34,6 @@ public abstract class Block extends GameObject {
     public Block(Vector2 position, Sprite sprite, ID id){
 
         super(position, sprite, id);
-
-        Random random = new Random();
 
         addID(Block.id);
         makeCollidable();
@@ -53,6 +48,19 @@ public abstract class Block extends GameObject {
         }
 
         return false;
+    }
+
+    public static Block getBlock(ID id, Vector2 position){
+
+        if(id.equals(GrassBlock.id))
+            return new GrassBlock(position);
+        if(id.equals(DirtBlock.id))
+            return new DirtBlock(position);
+        if(id.equals(StoneBlock.id))
+            return new StoneBlock(position);
+
+        return new GrassBlock(position);
+
     }
 
 

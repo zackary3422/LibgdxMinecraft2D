@@ -2,9 +2,9 @@ package com.mygdx.game.GameEngine;
 
 public class ID {
 
-    public long sequentialID;
+    private long sequentialID;
 
-    public static long currentSequentialID = 0;
+    private static long currentSequentialID = 0;
 
 
     public ID() {

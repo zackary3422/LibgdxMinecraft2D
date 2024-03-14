@@ -3,23 +3,20 @@ package com.mygdx.game.World;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Blocks.Block;
 import com.mygdx.game.Blocks.DirtBlock;
-import com.mygdx.game.Blocks.GrassBlock;
 import com.mygdx.game.Blocks.StoneBlock;
 import com.mygdx.game.GameEngine.ID;
 import com.mygdx.game.GameEngine.Range;
 
 import java.util.Random;
 
-public class Populator {
+public class PopulateBlocks {
 
-
-    //MAYBE instead of under block ID and other vars just require an array of ints on where to put each block and generate that
-    //Array in chunk class
 
     /**
      *
+     *
      */
-    public static void populateGrass(Block[][] blocks, int heightRange, int startingHeight, Range layerLengthRange){
+    public static void createTopLayer(Block[][] blocks, ID blockID, int startingHeight, Range layerLengthRange, Range heightRange){
 
         Random rand = new Random();
 
@@ -33,7 +30,7 @@ public class Populator {
         for(int i = 0; i < blocks[0].length; i++){
 
             //Set new grass block
-            blocks[currentHeight][i] = new GrassBlock(new Vector2(i * Block.BLOCK_LENGTH, currentHeight * Block.BLOCK_LENGTH));
+            blocks[currentHeight][i] = Block.getBlock(blockID, new Vector2(i * Block.LENGTH, currentHeight * Block.LENGTH));
 
             layerLength--;
 
@@ -41,17 +38,54 @@ public class Populator {
             if(layerLength <= 0){
                 layerLength = rand.nextInt(layerLengthRange.max - layerLengthRange.min) + layerLengthRange.min;
 
-                //RAND FOR UP 1 or down 1 block within height range
-                if(currentHeight >= heightRange + startingHeight)
+                //Add or subtract 1 to height
+                if(currentHeight >= heightRange.max)
                     currentHeight--;
-                else if(currentHeight <= startingHeight - heightRange)
+                else if(currentHeight <= heightRange.min)
                     currentHeight++;
                 else
-                    currentHeight += rand.nextInt(3) - 1;
+                    currentHeight += rand.nextInt(2) == 0 ? -1 : 1;// -1 - 1 //KEEP THIS AS IS OR REVERT?
 
             }
         }
+
     }
+
+    /** */
+    public static void createUnderLayer(Block[][] blocks, ID targetBlock, ID underBlock, Range blockRange){
+
+        Random rand = new Random();
+
+        for(int i = 0; i < blocks.length-1; i++)
+            for(int j = 0; j < blocks[0].length; j++)
+
+                if(blocks[i][j] != null && blocks[i-1][j] == null && blocks[i][j].hasMatchingID(targetBlock)) {
+                    int blockDepth = i - (rand.nextInt(blockRange.max - blockRange.min + 1) + blockRange.min);
+                    blockDepth = Math.max(blockDepth, 0);
+
+                    for (int k = i - 1; k > blockDepth; k--)
+                        blocks[k][j] = Block.getBlock(underBlock, new Vector2(i * Block.LENGTH, k * Block.LENGTH));
+                }
+
+
+    }
+
+    /** */
+    public static void createUnderLayer(Block[][] blocks, ID targetBlock, ID underBlock, int maxDepth){
+
+
+        for(int i = 0; i < blocks.length-1; i++)
+            for(int j = 0; j < blocks[0].length; j++)
+
+                if(blocks[i][j] != null && blocks[i-1][j] == null && blocks[i][j].hasMatchingID(targetBlock)) {
+
+                    for (int k = i - 1; k > maxDepth; k--)
+                        blocks[k][j] = Block.getBlock(underBlock, new Vector2(i * Block.LENGTH, k * Block.LENGTH));
+                }
+    }
+
+
+
 
     /**
      *
@@ -68,7 +102,7 @@ public class Populator {
                         if(k <= 0)
                             break;
 
-                        blocks[k][j] = new DirtBlock(new Vector2(j * Block.BLOCK_LENGTH, k * Block.BLOCK_LENGTH));
+                        blocks[k][j] = new DirtBlock(new Vector2(j * Block.LENGTH, k * Block.LENGTH));
                     }
                 }
 
@@ -86,7 +120,7 @@ public class Populator {
             for(int j = 0; j < blocks[0].length; j++){
 
                 if(blocks[i+1][j] != null && (blocks[i+1][j].hasMatchingID(underBlockID) || blocks[i+1][j].hasMatchingID(StoneBlock.id)) && blocks[i][j] == null)
-                    blocks[i][j] = new StoneBlock(new Vector2(j * Block.BLOCK_LENGTH, i * Block.BLOCK_LENGTH));
+                    blocks[i][j] = new StoneBlock(new Vector2(j * Block.LENGTH, i * Block.LENGTH));
 
 
             }
@@ -98,6 +132,8 @@ public class Populator {
     public static void generateCaves(Block[][] blocks){
 
     }
+
+
 
 
 

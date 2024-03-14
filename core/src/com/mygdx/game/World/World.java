@@ -1,13 +1,11 @@
 package com.mygdx.game.World;
 
 
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Blocks.Block;
 import com.mygdx.game.GameEngine.Movement;
 import com.mygdx.game.GameEngine.Player;
 import com.mygdx.game.World.Chunks.Chunk;
-import com.mygdx.game.GameEngine.Window;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -43,9 +41,9 @@ public class World{
         //Find which side needs to be expanded if necessary
         //Generate that chunk and link it to arraylist
 
-        if(player.getPosition().x - com.mygdx.game.GameEngine.Window.camera.viewportWidth < (chunks.get(0).getXPosition() * Block.BLOCK_LENGTH)){//Left
+        if(player.getPosition().x - com.mygdx.game.GameEngine.Window.camera.viewportWidth < (chunks.get(0).getXPosition() * Block.LENGTH)){//Left
             ChunkGenerator.chunkExpander(chunks, Movement.Direction.LEFT);
-        } else if(player.getPosition().x + com.mygdx.game.GameEngine.Window.camera.viewportWidth > (chunks.get(chunks.size()-1).getXPosition() * Block.BLOCK_LENGTH)){
+        } else if(player.getPosition().x + com.mygdx.game.GameEngine.Window.camera.viewportWidth > (chunks.get(chunks.size()-1).getXPosition() * Block.LENGTH)){
             ChunkGenerator.chunkExpander(chunks, Movement.Direction.RIGHT);
         }
 

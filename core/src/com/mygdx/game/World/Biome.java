@@ -9,19 +9,10 @@ import java.util.Random;
 public abstract class Biome {
 
     /** The types of biomes in the world*/
-    public enum BiomeTypes {FOREST, MOUNTAIN, DESSERT}
-
-
-    //SPAWN RATE PROPERTIES
-
+    public enum BiomeTypes {FOREST, MOUNTAIN, DESSERT, OCEAN}
 
     /** The minimum number of chunks a biomes needs before switching to a new one*/
     public static final int minBiomeChunkSize = 6;
-
-    //MAYBE USE A PARALLEL ARRAY FOR ITEMS AND SPAWN RATES
-
-
-    public float biomeSpawnChance;
 
 
     /**
@@ -30,8 +21,6 @@ public abstract class Biome {
      */
     public static Biome.BiomeTypes randomBiome(){
 
-        Random rand = new Random();
-        float chance;
 
 
         return Biome.BiomeTypes.FOREST;

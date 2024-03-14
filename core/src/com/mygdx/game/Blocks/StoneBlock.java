@@ -14,10 +14,10 @@ import com.mygdx.game.GameEngine.ID;
 public class StoneBlock extends Block {
 
     /** */
-    public static ID id = new ID();
+    public static final ID id = new ID();
 
     /** */
-    public static Texture texture = new Texture("StoneBlock.png");
+    public static final Texture texture = new Texture("StoneBlock.png");
 
     /**
      * Constructs a new stone block

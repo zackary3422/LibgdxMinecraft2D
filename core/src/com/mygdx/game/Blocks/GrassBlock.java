@@ -8,10 +8,10 @@ import com.mygdx.game.GameEngine.ID;
 public class GrassBlock extends Block {
 
     /** */
-    public static ID id = new ID();
+    public static final ID id = new ID();
 
     /** */
-    public static Texture texture = new Texture("GrassBlock.jpg");
+    public static final Texture texture = new Texture("GrassBlock.jpg");
 
     /** */
     public GrassBlock(Vector2 position){

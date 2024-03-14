@@ -11,7 +11,7 @@ public abstract class Chunk {
     public static final Dimension<Integer> blocksDimension = new Dimension<Integer>(16, 60);
 
     /** The size of a chunk in pixels*/
-    public static final Dimension<Float> dimension = new Dimension<Float>(blocksDimension.width * Block.BLOCK_LENGTH, blocksDimension.height * Block.BLOCK_LENGTH);
+    public static final Dimension<Float> dimension = new Dimension<Float>(blocksDimension.width * Block.LENGTH, blocksDimension.height * Block.LENGTH);
 
     /** The position of the chunk in the world in terms of blocks*/
     int xPosition;
@@ -117,12 +117,12 @@ public abstract class Chunk {
 
     /** */
     public float getLeftMostX(){
-        return xPosition * Block.BLOCK_LENGTH;
+        return xPosition * Block.LENGTH;
     }
 
     /** */
     public float getRightMostX(){
-        return (xPosition + blocksDimension.width) * Block.BLOCK_LENGTH;
+        return (xPosition + blocksDimension.width) * Block.LENGTH;
     }
 
     /** */
@@ -179,18 +179,19 @@ public abstract class Chunk {
                 temp = blocks[i][j];
 
                 if(temp != null)
-                    temp.setPosition(new Vector2(((j + xPosition) * Block.BLOCK_LENGTH), temp.getPosition().y));
+                    temp.setPosition(new Vector2(((j + xPosition) * Block.LENGTH), temp.getPosition().y));
 
             }
         }
 
     }
 
-
+    /** */
     public static Vector2 createPosition(int x, int y){
-        return new Vector2(x * Block.BLOCK_LENGTH, y * Block.BLOCK_LENGTH);
+        return new Vector2(x * Block.LENGTH, y * Block.LENGTH);
     }
 
+    /** */
     public void makeInvisible() {
 
         for (Block[] blockArray : blocks)
@@ -198,6 +199,7 @@ public abstract class Chunk {
                 block.makeInvisible();
     }
 
+    /** */
     public void makeVisible(){
 
         for(Block[] blockArray : blocks)

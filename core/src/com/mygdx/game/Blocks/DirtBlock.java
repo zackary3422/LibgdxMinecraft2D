@@ -12,7 +12,7 @@ public class DirtBlock extends Block {
     public static final Texture DirtBlockTexture = new Texture("DirtBlock.jpg");
 
     /** */
-    public static ID dirtBlockID = new ID();
+    public static final ID dirtBlockID = new ID();
 
     /**
      * Constructs a dirt block with coordinates.
