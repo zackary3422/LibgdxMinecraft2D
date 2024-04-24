@@ -31,8 +31,11 @@ public class Box2D {
         float topY2 = collidingObject.getPosition().y + collidingObject.getDimension().height;
 
         //Get overlap
-        boolean yOverlap = isOverlapping(bottomY1, topY1, bottomY2, topY2);
-        boolean xOverlap = isOverlapping(leftX1, rightX1, leftX2, rightX2);
+        //boolean yOverlap = isOverlapping(bottomY1, topY1, bottomY2, topY2);
+        //boolean xOverlap = isOverlapping(leftX1, rightX1, leftX2, rightX2);
+
+        boolean yOverlap = getOverlapInclusive(bottomY1, topY1, bottomY2, topY2) >= 0;
+        boolean xOverlap = getOverlapInclusive(leftX1, rightX1, leftX2, rightX2) >= 0;
 
         return xOverlap && yOverlap;
     }
@@ -112,8 +115,8 @@ public class Box2D {
         float topY2 = collidingObject.getPosition().y + collidingObject.getDimension().height;
 
         //Get overlap
-        boolean xOverlap = isOverlapping(leftX1, rightX1, leftX2, rightX2);
-        boolean yOverlap = isOverlapping(bottomY1, topY1, bottomY2, topY2) && bottomY1 >= bottomY2;
+        boolean xOverlap = getOverlapInclusive(leftX1, rightX1, leftX2, rightX2) >= 0;
+        boolean yOverlap = getOverlapInclusive(bottomY1, topY1, bottomY2, topY2) >= 0 && bottomY1 >= bottomY2;
 
         return xOverlap && yOverlap;
     }
@@ -199,26 +202,18 @@ public class Box2D {
 
         float yOverlap = getOverlap(bottomY1, topY1, bottomY2, topY2);
 
+        Movement.Direction pushDirection = axisPushDirection(collidableObject, collidingObject);
 
-        // If X-Overlap is shorter move horizontally out of block
-        if (xOverlap < yOverlap)
-            //Move Left
-            if (leftX1 < leftX2)
-                return -1 * xOverlap;
-
-            //Move Right
-            else
-                return xOverlap;
-
-        //If Y-Overlap is shorter move vertically out of block
-        else if (xOverlap > yOverlap)
-            //Move Down
-            if (bottomY1 < bottomY2)
-                return -1 * yOverlap;
-
-            //Move Up
-            else
+        switch(pushDirection){
+            case UP:
                 return yOverlap;
+            case DOWN:
+                return -1 * yOverlap;
+            case LEFT:
+                return -1 * xOverlap;
+            case RIGHT:
+                return xOverlap;
+        }
 
         return 0;
     }
@@ -251,20 +246,20 @@ public class Box2D {
         //Compare to find which one is shortest to apply
 
         // If X-Overlap is shorter move horizontally out of block
-        if (xOverlap < yOverlap)
+        if (xOverlap <= yOverlap)
             //Move Left
-            if (leftX1 < leftX2)
+            if (leftX1 <= leftX2)
                 return Movement.Direction.LEFT;
 
             //Move Right
             else
                 return Movement.Direction.RIGHT;
 
-        //If Y-Overlap is shorter move vertically out of block
-        else if (xOverlap > yOverlap)
+        //If Y-Overlap is shorter, move vertically out of block
+        else if (xOverlap >= yOverlap)
 
             //Move Down
-            if (bottomY1 < bottomY2)
+            if (bottomY1 <= bottomY2)
                 return Movement.Direction.DOWN;
             //Move Up
             else
@@ -282,6 +277,10 @@ public class Box2D {
         return Math.max(0, Math.min(max1, max2) - Math.max(min1, min2));
     }
 
+    public static float getOverlapInclusive(float min1, float max1, float min2, float max2){
+        return Math.min(max1, max2) - Math.max(min1, min2);
+    }
+
     /**
      * Takes in two line coordinates and returns if they are overlapping.
      * The min's represent the left point of the lines and the max's represent the right point of the lines.
@@ -289,5 +288,6 @@ public class Box2D {
     public static boolean isOverlapping(float min1, float max1, float min2, float max2){
         return Math.max(0, Math.min(max1, max2) - Math.max(min1, min2)) != 0;
     }
+
 
 }

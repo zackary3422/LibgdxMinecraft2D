@@ -29,10 +29,10 @@ public class Engine {
     /** Objects with defined logic to be updated */
     private static ArrayList<GameObject> objectsWithLogic;
 
-    /** Objects in list will have their colliding objects list updated*/
+    /** Objects in the list will have their colliding objects list updated*/
     private static ArrayList<GameObject> objectColliders;
 
-    /** Objects in list will be able to be collided with*/
+    /** Objects in the will be able to be collided with*/
     private static ArrayList<GameObject> objectCollidables;
 
     /** */
@@ -58,14 +58,14 @@ public class Engine {
         //Draw every game object onto the screen
         window.draw(objectsToBeDrawn);
 
+        //Updates game objects colliding list
+        updateCollisions();
+
         //Updates all game objects input
         inputUpdate();
 
         //Updates all game objects logic
         logicUpdate();
-
-        //Updates game objects colliding list
-        updateCollisions();
 
         //Update time
         Time.incrementTime();

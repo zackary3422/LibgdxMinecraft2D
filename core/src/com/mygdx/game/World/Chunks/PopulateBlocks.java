@@ -1,9 +1,7 @@
-package com.mygdx.game.World;
+package com.mygdx.game.World.Chunks;
 
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Blocks.Block;
-import com.mygdx.game.Blocks.DirtBlock;
-import com.mygdx.game.Blocks.StoneBlock;
 import com.mygdx.game.GameEngine.ID;
 import com.mygdx.game.GameEngine.Range;
 
@@ -13,10 +11,10 @@ public class PopulateBlocks {
 
 
     /**
-     *
+     * Creates a
      *
      */
-    public static void createTopLayer(Block[][] blocks, ID blockID, int startingHeight, Range layerLengthRange, Range heightRange){
+    public static void createSingleLayer(Block[][] blocks, ID blockID, int startingHeight, Range layerLengthRange, Range heightRange){
 
         Random rand = new Random();
 
@@ -60,7 +58,7 @@ public class PopulateBlocks {
             for(int j = 0; j < blocks[0].length; j++)
 
                 if(blocks[i][j] != null && blocks[i-1][j] == null && blocks[i][j].hasMatchingID(targetBlock)) {
-                    int blockDepth = i - (rand.nextInt(blockRange.max - blockRange.min + 1) + blockRange.min);
+                    int blockDepth = i - (rand.nextInt(blockRange.max - blockRange.min + 1) + blockRange.min) - 1;
                     blockDepth = Math.max(blockDepth, 0);
 
                     for (int k = i - 1; k > blockDepth; k--)
@@ -72,7 +70,6 @@ public class PopulateBlocks {
 
     /** */
     public static void createUnderLayer(Block[][] blocks, ID targetBlock, ID underBlock, int maxDepth){
-
 
         for(int i = 0; i < blocks.length-1; i++)
             for(int j = 0; j < blocks[0].length; j++)
@@ -87,49 +84,8 @@ public class PopulateBlocks {
 
 
 
-    /**
-     *
-     */
-    public static void populateDirt(Block[][] blocks, int layerDepth, ID underBlockID){
-
-        for(int i = blocks.length-2; i > 0; i--){
-            for(int j = 0; j < blocks[0].length; j++){
-
-                //Place dirt blocks under target block
-                if(blocks[i][j] != null && blocks[i][j].hasMatchingID(underBlockID)){
-                    for(int k = i - 1; k >= i - layerDepth; k--){
-
-                        if(k <= 0)
-                            break;
-
-                        blocks[k][j] = new DirtBlock(new Vector2(j * Block.LENGTH, k * Block.LENGTH));
-                    }
-                }
-
-            }
-        }
-
-    }
-
-    /**
-     *
-     * */
-    public static void populateStone(Block[][] blocks, ID underBlockID){
-
-        for(int i = blocks.length - 2; i >= 0; i--){
-            for(int j = 0; j < blocks[0].length; j++){
-
-                if(blocks[i+1][j] != null && (blocks[i+1][j].hasMatchingID(underBlockID) || blocks[i+1][j].hasMatchingID(StoneBlock.id)) && blocks[i][j] == null)
-                    blocks[i][j] = new StoneBlock(new Vector2(j * Block.LENGTH, i * Block.LENGTH));
-
-
-            }
-        }
-
-    }
-
     /** */
-    public static void generateCaves(Block[][] blocks){
+    public static void generateCaves(Chunk[] chunks){
 
     }
 

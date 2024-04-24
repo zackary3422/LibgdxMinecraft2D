@@ -12,6 +12,8 @@ public class GameObject {
     /** The x and y coordinates*/
     private Vector2 position;
 
+    public Vector2 prevPosition;
+
     /** The width and height*/
     protected Dimension<Float> dimension;
 
@@ -34,7 +36,7 @@ public class GameObject {
     protected Sprite sprite;
 
     /** Gravity applied to objects velocity*/
-    float gravity = -20f;
+    float gravity = 600f;
 
     /** */
     ArrayList<GameObject> collidingObjects;
@@ -50,6 +52,8 @@ public class GameObject {
         movement = new Movement();
         idList = new ArrayList<ID>();
         collidingObjects = new ArrayList<GameObject>();
+        prevPosition = new Vector2();
+
 
         Engine.add(this);
     }
@@ -64,7 +68,7 @@ public class GameObject {
         dimension = new Dimension<Float>(sprite.getWidth(), sprite.getHeight());
 
 
-        makeVisible();
+        setVisible(true);
     }
 
     /** */
@@ -79,7 +83,7 @@ public class GameObject {
         setPosition(position);
         dimension = new Dimension<Float>(sprite.getWidth(), sprite.getHeight());
 
-        makeVisible();
+        setVisible(true);
     }
 
     /** */
@@ -145,24 +149,20 @@ public class GameObject {
 
     }
 
-    /** */
-    public void makeVisible(){
+    public void setVisible(boolean visible){
 
-        if(!visible && sprite != null) {
-            visible = true;
+
+        if(visible && sprite != null) {
+            this.visible = true;
             Engine.startDrawing(this);
         }
 
-    }
-
-    /** */
-    public void makeInvisible(){
-
-        if(visible) {
-            visible = false;
+        if(!visible) {
+            this.visible = false;
             Engine.stopDrawing(this);
         }
     }
+
 
     /** */
     public void setDrawPriority(int newPriority){
@@ -242,6 +242,14 @@ public class GameObject {
         return collidable;
     }
 
+    public float getLeftX(){return position.x;}
+
+    public float getRightX(){return position.x + dimension.width;}
+
+    public float getBottomY(){return position.y;}
+
+    public float getTopY(){return position.y + dimension.height;}
+
 
     /* ----- MUTATORS ----- */
 
@@ -250,6 +258,7 @@ public class GameObject {
      * @param newPosition new Vector2 position
      */
     public void setPosition(Vector2 newPosition){
+        prevPosition = position;
         position = newPosition;
 
         if(sprite != null)

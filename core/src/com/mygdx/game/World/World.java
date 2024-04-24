@@ -3,16 +3,17 @@ package com.mygdx.game.World;
 
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Blocks.Block;
-import com.mygdx.game.GameEngine.Movement;
-import com.mygdx.game.GameEngine.Player;
+import com.mygdx.game.GameEngine.*;
+import com.mygdx.game.GameEngine.Window;
 import com.mygdx.game.World.Chunks.Chunk;
 
 import java.awt.*;
+import java.awt.Dimension;
 import java.util.ArrayList;
 
 /**
  *  The {@code World} class represents all the blocks in the Minecraft world. This class will store
- *  all the blocks in a 2D arraylist and this class can be used to access the worlds blocks
+ *  all the blocks in a 2D arraylist, and this class can be used to access the worlds blocks
  *  and to edit them.
  */
 public class World{
@@ -21,7 +22,7 @@ public class World{
     /** The list of all the chunks in the world*/
     public static ArrayList<Chunk> chunks;
 
-    /** The size of a chunk(segment of the world) in blocks*/
+    /** The size of a chunk (segment of the world) in blocks*/
     public static final Dimension CHUNK_SIZE = new Dimension(16, 60);
 
 
@@ -32,6 +33,13 @@ public class World{
 
         chunks = new ArrayList<Chunk>();
         ChunkGenerator.createStartingChunk(chunks);
+    }
+
+    /** */
+    public void update(Player player){
+
+        worldExpansion(player);
+
     }
 
 
@@ -50,15 +58,6 @@ public class World{
 
     }
 
-    /**
-     * Sets all chunks not within range of the camera to be invisible
-     *
-     */
-    public static void makeChunksInvisible(){
-
-
-
-    }
 
     /**
      *  Finds a spawn point for the player on top of a top layer block and

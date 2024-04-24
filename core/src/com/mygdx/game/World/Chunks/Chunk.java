@@ -8,7 +8,7 @@ import com.mygdx.game.World.Biome;
 public abstract class Chunk {
 
     /** The size of a chunk (segment of the world) in blocks*/
-    public static final Dimension<Integer> blocksDimension = new Dimension<Integer>(16, 60);
+    public static final Dimension<Integer> blocksDimension = new Dimension<Integer>(16, 80);
 
     /** The size of a chunk in pixels*/
     public static final Dimension<Float> dimension = new Dimension<Float>(blocksDimension.width * Block.LENGTH, blocksDimension.height * Block.LENGTH);
@@ -104,6 +104,7 @@ public abstract class Chunk {
 
         return 0;
     }
+
         //Make sure to account for other blocks like leaves or grass
     /** */
     public int getRightTopBlock(){
@@ -156,15 +157,7 @@ public abstract class Chunk {
     }
 
 
-
     /* ----- MUTATORS ----- */
-
-    /** */
-    public void setBlock(int x, int y, Block block){
-        blocks[y][x] = block;
-    }
-
-    //IMPLEMENT ABILITY TO MOVE THE ENTIRE CHUNK AND ALL BLOCKS IN IT
 
     /** */
     public void moveChunk(int xPosition){
@@ -186,25 +179,12 @@ public abstract class Chunk {
 
     }
 
-    /** */
+    /** *///SHOULD THIS BE HERE!!!!!
     public static Vector2 createPosition(int x, int y){
         return new Vector2(x * Block.LENGTH, y * Block.LENGTH);
     }
 
     /** */
-    public void makeInvisible() {
 
-        for (Block[] blockArray : blocks)
-            for (Block block : blockArray)
-                block.makeInvisible();
-    }
-
-    /** */
-    public void makeVisible(){
-
-        for(Block[] blockArray : blocks)
-            for(Block block : blockArray)
-                block.makeVisible();
-    }
 
 }

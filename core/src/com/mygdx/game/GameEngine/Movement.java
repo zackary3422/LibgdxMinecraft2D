@@ -28,7 +28,7 @@ public class Movement {
 
     /** */
     public Vector2 move(Vector2 position){
-        return new Vector2(position.x + horizontalVelocity, position.y + verticalVelocity);
+        return new Vector2(position.x + getDeltaSpeed(horizontalVelocity), position.y + getDeltaSpeed(verticalVelocity));
     }
 
     /** */

@@ -24,11 +24,13 @@ public class ChunkGenerator {
      */
     public static void chunkExpander(ArrayList<Chunk> chunks, Movement.Direction direction){
 
+        //Create the starting chunk if a list is empty
         if(chunks.isEmpty()) {
             createStartingChunk(chunks);
             return;
         }
 
+        //If given a wrong direction to expand chunks, then throw error
         if(direction != Movement.Direction.LEFT && direction != Movement.Direction.RIGHT) {
             System.out.println("ERROR: (ChunkGenerator) Invalid direction for method chunkExpander");
             return;

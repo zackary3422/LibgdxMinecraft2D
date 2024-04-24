@@ -19,10 +19,12 @@ public abstract class Block extends GameObject {
     /** This is the length of a block on all sides. All block assets have same lengths so this just uses the dirt block to get the length*/
     public static final float LENGTH = new Sprite(new Texture("DirtBlock.jpg")).getWidth();
 
-    //MAYBE ENFORCE BLOCKS POSITION BY FORCING POSITION TO JUST BE TWO INTS OF X AND Y
+    //MAYBE ENFORCE BLOCK'S POSITION BY FORCING POSITION TO JUST BE TWO INTS OF X AND Y
 
     /** The general ID for a block*/
     public static ID id = new ID();
+
+
 
 
     /**
@@ -50,6 +52,12 @@ public abstract class Block extends GameObject {
         return false;
     }
 
+    /**
+     * Creates and returns a new block with provided position based on id
+     * @param id the block to create
+     * @param position the position of the new block
+     * @return a new block based on id and position
+     *  */
     public static Block getBlock(ID id, Vector2 position){
 
         if(id.equals(GrassBlock.id))

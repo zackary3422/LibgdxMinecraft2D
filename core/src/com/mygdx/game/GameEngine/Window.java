@@ -30,6 +30,7 @@ public class Window {
     /** */
     public static int width, height;
 
+    /** */
     private BitmapFont font;
 
 
@@ -65,9 +66,8 @@ public class Window {
 
         //Draw all objects in the list to screen
         for(GameObject object : gameObjects)
-            if(object.isVisible() && inView(object))
+            if (object.isVisible() && inView(object))
                 object.getSprite().draw(batch);
-
 
         //Draw FPS counter
         font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), camera.position.x - 470, camera.position.y + 350);

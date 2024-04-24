@@ -23,13 +23,13 @@ public class Player extends GameObject {
     public static ID id = new ID();
 
     /*** The player movement speed*/
-    private float playerSpeed = 700;
+    private float playerSpeed = 300;
 
     /*** The speed multiplier when sprintin */
     private float shiftMultiplier = 1.9f;
 
     /*** The vertical force applied when jumping*/
-    static final float jumpForce = 7f;
+    static final float jumpForce = 250f;
 
 
     /**
@@ -55,7 +55,6 @@ public class Player extends GameObject {
         setPosition(position);
         setPosition(new Vector2(0,1500));
         Window.camera.position.set(0, 1500, 0);
-
     }
 
     /**
@@ -64,17 +63,8 @@ public class Player extends GameObject {
     @Override
     public void logic() {
 
-        //Get blocks player is currently colliding with
-        updateCollidingBlocks();
-
         //Move player out of blocks
-        collisionUpdate();
-
-        //Apply velocities to move player
-        setPosition(movement.move(getPosition()));
-
-      //  for(GameObject object : collidingObjects)
-     //      setPosition(Box2D.getCollisionFreePos(this, object));
+        // collisionUpdate();
 
     }
 
@@ -84,31 +74,32 @@ public class Player extends GameObject {
     @Override
     public void input() {
 
-        if(Gdx.input.isKeyPressed(Input.Keys.D)) {
+        for(GameObject object : collidingObjects)
+            setPosition(Box2D.getCollisionFreePos(this, object));
+
+
+        //Key input with collision prevention
+        if (Gdx.input.isKeyPressed(Input.Keys.D) && Box2DFilter.getRightCollisions(collidingObjects, this).isEmpty())
             setPosition(Movement.move(getPosition(), Movement.Direction.RIGHT, playerSpeed));
-          //  movement.horizontalVelocity = movement.getDeltaSpeed(playerSpeed);
-        }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.A)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.A) && Box2DFilter.getLeftCollisions(collidingObjects, this).isEmpty())
             setPosition(Movement.move(getPosition(), Movement.Direction.LEFT, playerSpeed));
-        }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.W)) {
-            setPosition(Movement.move(getPosition(), Movement.Direction.UP, playerSpeed));
-        }
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && !Box2DFilter.getBottomCollisions(collidingObjects, this).isEmpty())
+            movement.verticalVelocity = jumpForce;
 
-        if(Gdx.input.isKeyPressed(Input.Keys.S)) {
-            setPosition(Movement.move(getPosition(), Movement.Direction.DOWN, playerSpeed));
-        }
+        if(Gdx.input.isTouched())
+            leftMouseClick();
 
-        // Update the camera position smoothly
+        collisionUpdate();
+
+        Window.camera.position.set(getPosition().x, getPosition().y, 0);
+
+        //Update the camera position smoothly
         //float cameraX = MathUtils.lerp(Window.camera.position.x, getPosition().x, 0.1f);
         //float cameraY = MathUtils.lerp(Window.camera.position.y, getPosition().y, 0.1f);
         //Window.camera.position.set(cameraX, cameraY, 0);
-
-        Window.camera.position.set(getPosition().x, getPosition().y, 0);
     }
-
 
     /**
      * Move player out of block using the SAT to separate block based on the shortest axis it would take
@@ -116,30 +107,61 @@ public class Player extends GameObject {
      */
     public void collisionUpdate() {
 
-        //Loop through all blocks colliding with player
 
-        /*
-        for (Block collidingBlock : collidingBlocks) {
+        //Update collisions list
+        Engine.updateCollisions();
 
-            //Sets new position moved out of current colliding block
-            setPosition(box2D.getCollisionFreePos(collidingBlock.box2D));
+        for(GameObject object : collidingObjects)
+            setPosition(Box2D.getCollisionFreePos(this, object));
 
-            //Find blocks colliding with player in new position
-            updateCollidingBlocks();
+        //Apply velocities
+        setPosition(movement.move(getPosition()));
+
+        //gravity
+        movement.verticalVelocity -= Movement.getDeltaSpeed(gravity);
+
+        //Update collisions list
+        Engine.updateCollisions();
+
+        //Update position based on bottom collision
+        ArrayList<GameObject> bottomCollisions = Box2DFilter.getBottomCollisions(collidingObjects, this);
+
+        //Pushed player up
+        for(GameObject object : collidingObjects) {
+            if(Box2D.axisPushDirection(this, object) == Movement.Direction.UP) {
+                setPosition(new Vector2(getPosition().x, bottomCollisions.get(0).getTopY()));
+                movement.verticalVelocity = 0;
+            }
         }
-        */
 
 
     }
 
+    public void leftMouseClick(){
 
-    /**
-     * Update collidingBlocks list for new blocks colliding with player.
-     */
-    public void updateCollidingBlocks() {
+
+        //Get mouse coordinates
+        float mouseX = Gdx.input.getX() - ((float) Gdx.graphics.getWidth() / 2);
+        float mouseY = ((float) Gdx.graphics.getHeight() / 2);
+
+        if(Gdx.input.getY() < Gdx.graphics.getHeight() / 2)
+            mouseY += (float) Gdx.graphics.getHeight() / 2 - Gdx.input.getY();
+        else
+            mouseY +=  -1 * ((float) Gdx.graphics.getHeight() / 2 - Gdx.input.getY());
+
+        mouseX += Window.camera.position.x;
+        mouseY += Window.camera.position.y;
+
+
+        //System.out.println("MOUSE X: " + mouseX);
+        System.out.println("MOUSE Y: " + mouseY);
+        System.out.println("CAMERAY: " + Window.camera.position.y);
+
+        //Convert mouse coordinates to level coordinates
 
 
     }
+
 
     public String toString(){
         return "Player Object";
